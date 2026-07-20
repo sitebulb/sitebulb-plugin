@@ -13,7 +13,7 @@ Works in [Claude Code](https://claude.com/claude-code), Codex, Cursor, GitHub Co
 /plugin install sitebulb@sitebulb
 ```
 
-The plugin configures the two Sitebulb MCP servers automatically — no separate MCP step. The first time a skill needs your audit data, Claude Code opens a browser window to sign in to your Sitebulb account. Authenticate the server matching the product you use and ignore the other (or disable it under `/mcp`).
+Then connect the Sitebulb MCP (below).
 
 ### Codex
 
@@ -26,7 +26,7 @@ codex plugin marketplace add sitebulb/sitebulb-plugin
 codex plugin add sitebulb@sitebulb
 ```
 
-Codex configures the two Sitebulb MCP servers from the plugin and prompts you to sign in — authenticate the server matching the product you use (Desktop or Cloud) and ignore the other.
+Then connect the Sitebulb MCP (below).
 
 ### Cursor
 
@@ -63,11 +63,11 @@ Then connect the Sitebulb MCP (below).
 
 ## Connecting to Sitebulb
 
-The skills read your audit data through the Sitebulb MCP — `https://mcp.sitebulb.com/desktop` for Sitebulb Desktop, `https://mcp.sitebulb.com/cloud` for Sitebulb Cloud — with OAuth sign-in and a read-only connection. Claude Code and Codex configure both servers automatically when the plugin installs; in every other agent, add the server for the product you use following the setup guide:
+The skills read your audit data through the Sitebulb MCP. Connect the server for the product you use — this is the only setup step after installing the plugin, and the guide walks you through it for each assistant:
 
 **→ [Sitebulb MCP: Start Here](https://support.sitebulb.com/en/articles/15970977-sitebulb-mcp-start-here)**
 
-If a skill runs before the MCP is connected, it will point you at the same guide.
+The server URL is `https://mcp.sitebulb.com/desktop` for Sitebulb Desktop or `https://mcp.sitebulb.com/cloud` for Sitebulb Cloud, with OAuth sign-in to your Sitebulb account. If a skill runs before the MCP is connected, it will point you at the same guide.
 
 **Requirements:** a Sitebulb Desktop or Sitebulb Cloud licence, at least one finished audit in the project you want to work with, and `python3` available to the agent (the skills bundle small stdlib-only scripts for scoring and document generation). The connection is read-only — skills can read your audits but never trigger crawls.
 

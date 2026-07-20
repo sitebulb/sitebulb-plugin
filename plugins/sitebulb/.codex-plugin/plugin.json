@@ -8,7 +8,6 @@
   "license": "MIT",
   "keywords": ["seo", "technical-seo", "sitebulb", "site-audit", "crawler"],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Sitebulb",
     "category": "Productivity",
