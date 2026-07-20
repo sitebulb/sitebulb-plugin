@@ -1,0 +1,11 @@
+{
+  "name": "sitebulb",
+  "displayName": "Sitebulb",
+  "version": "0.1.0",
+  "description": "Five technical-SEO skills that work with your Sitebulb Desktop or Cloud audits: prioritise fixes, track changes, produce client audit documents, raise dev tickets, and run post-release checks.",
+  "author": { "name": "Sitebulb Ltd", "url": "https://sitebulb.com" },
+  "homepage": "https://github.com/sitebulb/sitebulb-plugin",
+  "repository": "https://github.com/sitebulb/sitebulb-plugin",
+  "license": "MIT",
+  "keywords": ["seo", "technical-seo", "sitebulb", "site-audit", "crawler"]
+}

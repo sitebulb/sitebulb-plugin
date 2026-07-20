@@ -1,0 +1,14 @@
+{
+  "name": "sitebulb",
+  "owner": { "name": "Sitebulb Ltd", "url": "https://sitebulb.com" },
+  "description": "Official Sitebulb plugins for Claude Code — technical-SEO skills powered by your Sitebulb Desktop or Cloud audits.",
+  "plugins": [
+    {
+      "name": "sitebulb",
+      "source": "./plugins/sitebulb",
+      "description": "Technical-SEO skill suite for Sitebulb Desktop and Cloud audits",
+      "category": "seo",
+      "tags": ["seo", "audit", "sitebulb"]
+    }
+  ]
+}
