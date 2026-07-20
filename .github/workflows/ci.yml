@@ -17,14 +17,20 @@ jobs:
       - name: Scorer test suite
         run: python3 shared/scripts/test_score_effort.py
 
+      - name: Document builder test suite
+        run: python3 plugins/sitebulb/skills/technical-seo-audit/scripts/test_build_docx.py
+
       - name: Shared files in sync
         run: python3 scripts/sync_shared.py --check
 
       - name: Manifests are valid JSON
         run: |
           python3 -m json.tool .claude-plugin/marketplace.json > /dev/null
+          python3 -m json.tool .cursor-plugin/marketplace.json > /dev/null
+          python3 -m json.tool .agents/plugins/marketplace.json > /dev/null
           python3 -m json.tool plugins/sitebulb/.claude-plugin/plugin.json > /dev/null
-          python3 -m json.tool plugins/sitebulb/.mcp.json > /dev/null
+          python3 -m json.tool plugins/sitebulb/.codex-plugin/plugin.json > /dev/null
+          python3 -m json.tool plugins/sitebulb/.cursor-plugin/plugin.json > /dev/null
 
       - name: Only approved MCP endpoints referenced
         run: |
