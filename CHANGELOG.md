@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added `PRIVACY.md` (no telemetry, local-only scripts, disclosure of the three data paths: AI host, Sitebulb MCP, user-connected integrations) and `SECURITY.md` (private vulnerability reporting via the GitHub Security tab or support.sitebulb.com). The Codex manifest now carries `privacyPolicyURL`.
+
 - Multi-agent support: native plugin manifests for Codex (`.agents/plugins/marketplace.json` at repo root — the manifest Codex's marketplace flow reads, per the canonical `openai/plugins` layout — plus `plugins/sitebulb/.codex-plugin/plugin.json`) and Cursor (`.cursor-plugin/marketplace.json` + `plugins/sitebulb/.cursor-plugin/plugin.json`); GitHub Copilot, Factory Droid, Qwen Code, and Grok CLI install via the existing Claude-compatible manifests. README gains per-host install instructions and a "Connecting to Sitebulb" section.
 - Removed the bundled `.mcp.json`: it auto-configured both the Desktop and Cloud MCP servers, but users have one product or the other, so every install surfaced a phantom server with an OAuth prompt the user couldn't complete. Connecting the right server is now a single documented step for every host via the Sitebulb MCP setup guide, which the skills also link when run unconnected.
 - `shared-core.md` preflight now handles the no-MCP-connected case explicitly, pointing users at the Sitebulb MCP setup guide (support.sitebulb.com) — the on-ramp for hosts where the plugin cannot auto-configure the MCP servers.
