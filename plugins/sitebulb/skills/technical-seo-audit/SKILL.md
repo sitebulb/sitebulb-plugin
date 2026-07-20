@@ -62,7 +62,13 @@ Per item, always: a plain-language explanation of what the issue is and why it m
 
 **Voice.** Client-facing, calibrated to the stated reader; non-technical by default — the register of a good consultant explaining, not a tool reporting. The scoring machinery never appears: impact scores, tiers, section weights, axes, bands, archetype numbers, gate names, flag names, field names, tool names and the scorer's basis lines are internal working — translate every one into plain consequence. Indexability statements obey shared-core rule 9: a 0/0 split on a split-less hint type is never "none of these pages can be indexed"; duplicate-content sets are wholly indexable by design — say that in prose where it matters, never render the zeros.
 
-**Delivery.** Produce the document as a Word (.docx) file using whatever document tooling the assistant's environment provides — the template reference describes structure and content in full, deliberately independent of any assistant's internal document machinery. Where the environment cannot produce a Word document, produce the nearest rich-document format it can and say so; the structure is identical.
+**Delivery.** Produce the document by writing the JSON document spec and running the bundled builder — Python stdlib only, nothing to install, so it behaves identically in any environment that can run `python3`:
+
+```bash
+python3 scripts/build_docx.py spec.json "Technical SEO Audit - <client>.docx"
+```
+
+The spec format (blocks for headings, paragraphs with bold/italic/link runs, bullets, tables, page breaks, and per-block anchored review comments) is documented at the top of the script; `references/document-template.md` is the contract for what goes in it. Always deliver through this script — never hand-write OOXML and never reach for environment-specific document tooling, which is what makes the output portable and the comments reliable. Only where Python itself is unavailable, produce the nearest rich-document format the environment can and say so; the structure is identical.
 
 ## The review layer
 
@@ -73,7 +79,7 @@ The document ships seeded with **consultant-facing review comments** — native 
 3. **Things Sitebulb can't see** — verify a fix path against the client's actual CMS or stack before committing to it; where a screenshot of an example page would strengthen the section, say so (the assistant cannot take one; the consultant can).
 4. **Assumptions under the refusal default** — anything the consultant declined to answer that the document proceeded on.
 
-Comments speak plain SEO — the consultant didn't author this skill either, so the presentation bans apply inside comments too. Where the environment cannot write native document comments, use a visually distinct inline marker style (e.g. highlighted `[REVIEW: …]` paragraphs) the consultant deletes — same content, uglier carrier.
+Comments speak plain SEO — the consultant didn't author this skill either, so the presentation bans apply inside comments too. In the document spec, each comment is a `comment` field on the block it concerns; `scripts/build_docx.py` writes it as a native Word comment anchored to that passage. Only in the no-Python fallback (where the builder cannot run at all), use a visually distinct inline marker style (e.g. highlighted `[REVIEW: …]` paragraphs) the consultant deletes — same content, uglier carrier.
 
 **The covering note** goes in the chat, not the document: this is a working draft; the comments mark where your judgment is needed; check, edit and improve it before it carries your name. Then stay in the conversation — offer to rework an item's framing, swap an item for a demoted one, adjust register for a different reader, or hand off ("want these as dev tickets" → the dev-handoff skill; "what should we tackle first ourselves" → the what-to-fix-first skill).
 
@@ -91,6 +97,7 @@ Comments speak plain SEO — the consultant didn't author this skill either, so 
 
 - `references/document-template.md` — the deliverable spec: section-by-section structure, per-item anatomy, the review-comment placements, register calibration. Read before drafting.
 - `scripts/score_effort.py` — the deterministic two-axis scorer shared with what-to-fix-first; call it in steps 3–4, never hand-compute (`scripts/test_score_effort.py` is its suite).
+- `scripts/build_docx.py` — the stdlib-only Word builder: JSON spec in, `.docx` with native anchored review comments out; spec format documented at the top of the script (`scripts/test_build_docx.py` is its suite). The only delivery path.
 - `references/shared-core.md` — Sitebulb data-handling rules, § Tool binding + preflight, interview ground rules. Read before any data pull.
 - `references/context-emphasis.md` — the reframe rules: type lift/demote, situation lead stories, precedence, gating, refusal default. Read before the interview.
 - `references/effort-scoring.md` — archetypes, bands, modifiers, durations, impact mechanics: the spec the script implements.

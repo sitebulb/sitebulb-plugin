@@ -1,6 +1,6 @@
 # The Audit Document — Deliverable Spec
 
-Self-contained structural spec for the client-facing technical SEO audit document. It describes *what the document is*, independent of any assistant's document tooling: produce it as a Word (.docx) file with whatever document-generation capability the environment provides. Modelled on real agency audit deliverables; the register is a good consultant explaining, not a tool reporting.
+Self-contained structural spec for the client-facing technical SEO audit document. It describes *what the document is*, independent of any assistant's document tooling: produce it as a Word (.docx) file by writing the JSON document spec and running `scripts/build_docx.py` (Python stdlib only, nothing to install; spec format documented at the top of the script). Modelled on real agency audit deliverables; the register is a good consultant explaining, not a tool reporting.
 
 Everything below is client-facing except the review comments, which are consultant-facing (see § Review comments). The presentation bans from SKILL.md § The document apply to every word in the file, comments included.
 
@@ -35,7 +35,7 @@ Whatever the register: no scoring vocabulary, no tool or field names, no interna
 
 ## Review comments
 
-Consultant-facing notes, inserted as native document comments anchored to the passage each concerns; where the environment cannot write native comments, use visually distinct highlighted paragraphs in the form `[REVIEW: …]` that the consultant deletes. Placements:
+Consultant-facing notes, inserted as native document comments anchored to the passage each concerns — a `comment` field on the relevant block in the `build_docx.py` spec. Only where the builder cannot run at all (no Python), use visually distinct highlighted paragraphs in the form `[REVIEW: …]` that the consultant deletes. Placements:
 
 - On sample-URL blocks where the sample raises a genuine question — a pattern the consultant should confirm, examples that look deliberate rather than broken, a mix the client will ask about. At minimum, one sample spot-check comment per document, on the most load-bearing item. Sample blocks whose contents are exactly what the item describes need no comment.
 - On any item selected, demoted, excluded or framed off the commissioning context, where reasonable consultants could differ: what was decided, on what stated context, what would reverse it.

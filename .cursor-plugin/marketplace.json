@@ -1,0 +1,15 @@
+{
+  "name": "sitebulb",
+  "owner": { "name": "Sitebulb Ltd", "url": "https://sitebulb.com" },
+  "metadata": {
+    "description": "Cursor plugin marketplace for Sitebulb plugins",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "sitebulb",
+      "source": "./plugins/sitebulb",
+      "description": "Technical-SEO skill suite for Sitebulb Desktop and Cloud audits"
+    }
+  ]
+}

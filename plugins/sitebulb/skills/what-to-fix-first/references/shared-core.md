@@ -18,6 +18,7 @@ The Sitebulb MCP's tool names and response field names are not a stable contract
 
 **Preflight — run before pulling data, after the framing interview.** Resolve the specific capabilities the current skill needs against the connected tools. Each skill declares its own split:
 
+- **No Sitebulb MCP connected at all** — stop immediately, before any interview: these skills read audit data only through the Sitebulb MCP, and there is no fallback data source. Point the user at the setup guide — https://support.sitebulb.com/en/articles/15970977-sitebulb-mcp-start-here — which covers connecting Sitebulb Desktop or Cloud from each assistant, then offer to continue once it's connected.
 - **Core capability missing** — one the skill cannot produce trustworthy output without. Stop, and tell the user plainly which capability you expected, that the Sitebulb tool providing it may have been renamed or removed, and what you can see connected instead. Do not substitute another tool's data or proceed on assumption: output built on the wrong source is worse than no output, because it reads as authoritative.
 - **Peripheral capability missing** — useful but not load-bearing (a traffic-data report, a knowledge-base link). Note the gap in the output and continue with what remains.
 
