@@ -22,7 +22,7 @@ builder) that run locally using only the Python standard library.
    provider, not by this plugin.
 
 2. **The Sitebulb MCP.** When you connect it and a skill runs, your agent
-   reads audit data from `mcp.sitebulb.com` over an OAuth-authorised,
+   reads audit data from `mcp.sitebulb.com/desktop` or `mcp.sitebulb.com/cloud` over an OAuth-authorised,
    read-only connection. Sitebulb's handling of that data is governed by the
    [Sitebulb privacy policy](https://sitebulb.com/policies/cookie-and-privacy-policy/).
 
