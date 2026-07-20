@@ -26,7 +26,7 @@ codex plugin marketplace add sitebulb/sitebulb-plugin
 codex plugin add sitebulb@sitebulb
 ```
 
-Then connect the Sitebulb MCP (below).
+Codex configures the two Sitebulb MCP servers from the plugin and prompts you to sign in — authenticate the server matching the product you use (Desktop or Cloud) and ignore the other.
 
 ### Cursor
 
@@ -63,7 +63,7 @@ Then connect the Sitebulb MCP (below).
 
 ## Connecting to Sitebulb
 
-The skills read your audit data through the Sitebulb MCP — `https://mcp.sitebulb.com/desktop` for Sitebulb Desktop, `https://mcp.sitebulb.com/cloud` for Sitebulb Cloud — with OAuth sign-in and a read-only connection. Claude Code configures both servers automatically when the plugin installs; in every other agent, add the server for the product you use following the setup guide:
+The skills read your audit data through the Sitebulb MCP — `https://mcp.sitebulb.com/desktop` for Sitebulb Desktop, `https://mcp.sitebulb.com/cloud` for Sitebulb Cloud — with OAuth sign-in and a read-only connection. Claude Code and Codex configure both servers automatically when the plugin installs; in every other agent, add the server for the product you use following the setup guide:
 
 **→ [Sitebulb MCP: Start Here](https://support.sitebulb.com/en/articles/15970977-sitebulb-mcp-start-here)**
 

@@ -1,0 +1,12 @@
+{
+  "name": "sitebulb",
+  "interface": { "displayName": "Sitebulb" },
+  "plugins": [
+    {
+      "name": "sitebulb",
+      "source": { "source": "local", "path": "./plugins/sitebulb" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    }
+  ]
+}

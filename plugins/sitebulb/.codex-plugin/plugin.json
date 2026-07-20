@@ -8,8 +8,10 @@
   "license": "MIT",
   "keywords": ["seo", "technical-seo", "sitebulb", "site-audit", "crawler"],
   "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Sitebulb",
+    "category": "Productivity",
     "shortDescription": "Technical-SEO skills powered by your Sitebulb audits",
     "longDescription": "Five technical-SEO skills that work with your Sitebulb Desktop or Cloud audits: prioritise fixes, track changes between crawls, produce client-facing audit documents, raise dev tickets, and run post-release checks. Requires the Sitebulb MCP connection — see https://support.sitebulb.com/en/articles/15970977-sitebulb-mcp-start-here.",
     "developerName": "Sitebulb Ltd",
