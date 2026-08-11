@@ -17,6 +17,8 @@
     "capabilities": ["Interactive", "Read", "Write"],
     "websiteURL": "https://github.com/sitebulb/sitebulb-plugin",
     "privacyPolicyURL": "https://sitebulb.com/policies/cookie-and-privacy-policy/",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png",
     "defaultPrompt": [
       "What should I fix first on this site?",
       "What changed since the last crawl?",
