@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 — 2026-08-11
+
+- All five skills renamed with a `sitebulb-` prefix so they cannot be confused with similarly named skills a user already has installed: `sitebulb-what-to-fix-first`, `sitebulb-what-changed`, `sitebulb-technical-seo-audit`, `sitebulb-dev-handoff`, `sitebulb-release-check`. Skill directories, frontmatter `name` fields, cross-references, `scripts/sync_shared.py` and the README were all updated to match. The CI step that failed on `sitebulb-` prefixed names is replaced by one that fails on un-prefixed ones.
 
 - Added `PRIVACY.md` (no telemetry, local-only scripts, disclosure of the three data paths: AI host, Sitebulb MCP, user-connected integrations) and `SECURITY.md` (private vulnerability reporting via the GitHub Security tab or support.sitebulb.com). The Codex manifest now carries `privacyPolicyURL`.
 

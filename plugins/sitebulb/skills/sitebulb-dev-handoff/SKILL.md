@@ -1,5 +1,5 @@
 ---
-name: dev-handoff
+name: sitebulb-dev-handoff
 description: "Turn Sitebulb audit findings into dev-ready tickets in the connected PM tool (Jira, Linear, Asana, Monday, or ClickUp): one ticket per selected issue — what's wrong, why it matters, the true affected-URL count with labelled sample URLs and a pointer to the full export in the Sitebulb app, a suggested fix with its knowledge-base link, acceptance criteria, severity-mapped priority, and an effort estimate (size and duration) — every draft previewed in chat before anything is created, falling back to markdown ticket bodies when no PM tool is connected. Use when the user wants to raise, create, push, or log tickets/tasks/issues from crawl or audit findings — \"send these to Jira\", \"ticket the quick wins\", \"hand the 404s to the devs\", \"make Linear issues for these\" — not for triggering crawls, since it reads Sitebulb read-only."
 ---
 

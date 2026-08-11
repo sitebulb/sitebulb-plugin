@@ -6,4 +6,4 @@ Produces the client-facing technical SEO audit document from a Sitebulb project'
 
 **Needs:** a connected Sitebulb Desktop or Cloud MCP with a finished audit. GA/GSC connected inside Sitebulb sharpens item selection with traffic data (optional).
 
-**Hands off to:** `dev-handoff` (turn items into tickets), `what-to-fix-first` (conversational triage instead of a document).
+**Hands off to:** `sitebulb-dev-handoff` (turn items into tickets), `sitebulb-what-to-fix-first` (conversational triage instead of a document).

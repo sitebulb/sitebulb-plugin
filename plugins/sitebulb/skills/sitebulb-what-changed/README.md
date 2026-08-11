@@ -6,4 +6,4 @@ Tells the change story between a Sitebulb project's two most recent audits — w
 
 **Needs:** a connected Sitebulb Desktop or Cloud MCP with two finished audits to compare (with only one, it delivers a baseline read instead).
 
-**Hands off to:** `what-to-fix-first` (full triage), `dev-handoff` (tickets), `technical-seo-audit` (client document). For a configured threshold-and-alert ritual, use `release-check`.
+**Hands off to:** `sitebulb-what-to-fix-first` (full triage), `sitebulb-dev-handoff` (tickets), `sitebulb-technical-seo-audit` (client document). For a configured threshold-and-alert ritual, use `sitebulb-release-check`.

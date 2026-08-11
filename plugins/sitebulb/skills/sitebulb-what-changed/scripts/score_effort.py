@@ -230,7 +230,7 @@ def severity_number(sev: str):
 def compute_impact(hint: dict, row: dict, gates: dict) -> dict:
     """Impact = effective section weight x severity x effective coverage x
     traffic linkage. Returns {} when the impact inputs aren't supplied (the
-    effort-only call shape stays valid — dev-handoff compatibility)."""
+    effort-only call shape stays valid — sitebulb-dev-handoff compatibility)."""
     has_inputs = ("coverage" in hint and "indexable_urls" in hint)
     sev = hint.get("severity") or row.get("severity_default") or ""
     sev_num = severity_number(sev)

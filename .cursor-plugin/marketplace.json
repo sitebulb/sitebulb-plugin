@@ -3,7 +3,7 @@
   "owner": { "name": "Sitebulb Ltd", "url": "https://sitebulb.com" },
   "metadata": {
     "description": "Cursor plugin marketplace for Sitebulb plugins",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "plugins": [
     {

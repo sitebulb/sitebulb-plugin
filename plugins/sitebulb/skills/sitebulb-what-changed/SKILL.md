@@ -1,6 +1,6 @@
 ---
-name: what-changed
-description: "Tell the change story between a Sitebulb project's two most recent audits — wins first, then regressions, then a watch-list, each with what it means and whether it needs action — reframed for the business's situation, with a Google Analytics/Search Console overlay where connected, evidence cards showing per-hint deltas, and an optional self-contained HTML dashboard. Use for \"what changed since last crawl\", \"monthly check\", \"progress since last month\", \"did we get better or worse\", \"did the release/deploy break anything\", \"did the migration cause this\", or prepping a client update — including a \"client meeting in 20 minutes\" short version. Not for full-site triage (what-to-fix-first), raising dev tickets (dev-handoff), client audit documents (technical-seo-audit), or configured watch-list/threshold alerting (release-check)."
+name: sitebulb-what-changed
+description: "Tell the change story between a Sitebulb project's two most recent audits — wins first, then regressions, then a watch-list, each with what it means and whether it needs action — reframed for the business's situation, with a Google Analytics/Search Console overlay where connected, evidence cards showing per-hint deltas, and an optional self-contained HTML dashboard. Use for \"what changed since last crawl\", \"monthly check\", \"progress since last month\", \"did we get better or worse\", \"did the release/deploy break anything\", \"did the migration cause this\", or prepping a client update — including a \"client meeting in 20 minutes\" short version. Not for full-site triage (sitebulb-what-to-fix-first), raising dev tickets (sitebulb-dev-handoff), client audit documents (sitebulb-technical-seo-audit), or configured watch-list/threshold alerting (sitebulb-release-check)."
 ---
 
 # What Changed
@@ -50,7 +50,7 @@ Ask once, up front, before any data pull — one round only, per the shared-core
 
    **The analysis** — wins first, then regressions, then the watch-list. Per item:
    - **What it means** — the consequence in this business's context, tied to the stated events where they plausibly explain it ("this appeared the week of your release — worth checking whether the new template shipped without canonicals").
-   - **Whether it needs action** — a plain call: fix it, watch it, or celebrate it and move on. This skill's job is what changed and whether it needs action, **not sizing the work**. If an effort estimate genuinely helps ("is this a big job?" asked directly), it comes from `scripts/score_effort.py` — never ad hoc — and is always paired with what the work actually is; a bare duration reads as inflated or arbitrary. Otherwise leave sizing to the what-to-fix-first skill and say so.
+   - **Whether it needs action** — a plain call: fix it, watch it, or celebrate it and move on. This skill's job is what changed and whether it needs action, **not sizing the work**. If an effort estimate genuinely helps ("is this a big job?" asked directly), it comes from `scripts/score_effort.py` — never ad hoc — and is always paired with what the work actually is; a bare duration reads as inflated or arbitrary. Otherwise leave sizing to the sitebulb-what-to-fix-first skill and say so.
 
      ```bash
      echo '{"hints":[{"url_filter_id":"broken_internal_urls","title":"Broken internal URLs",
@@ -69,7 +69,7 @@ Ask once, up front, before any data pull — one round only, per the shared-core
 
 7. **Two depths.** The default is the **monthly client version** — the full analysis and cards above. When the user signals time pressure ("client meeting in 20 minutes", "give me the short version"), produce the **20-minutes version**: the headline sentence (net position vs last crawl), the one or two changes that need a decision or a mention in the meeting, and one line each on the rest — visibly shorter, no cards unless asked, same numbers.
 
-8. **Stay in the conversation.** The read is an opening, not a terminus. Offer next explorations tied to what moved ("dig into the canonical regression?", "want the watch-list items expanded?"). Hand off when asked: "raise these as tickets" → the dev-handoff skill; "I need this as a client document" → the technical-seo-audit skill; "what should I fix first overall?" → the what-to-fix-first skill.
+8. **Stay in the conversation.** The read is an opening, not a terminus. Offer next explorations tied to what moved ("dig into the canonical regression?", "want the watch-list items expanded?"). Hand off when asked: "raise these as tickets" → the sitebulb-dev-handoff skill; "I need this as a client document" → the sitebulb-technical-seo-audit skill; "what should I fix first overall?" → the sitebulb-what-to-fix-first skill.
 
 9. **Optional dashboard — only if the user wants it.** Offer once ("want this as a shareable dashboard for the client?"). If yes: render natively where the assistant supports inline interactive output; otherwise (and for anything the user will send on) deliver a **self-contained HTML file** — no external dependencies, no assistant-specific machinery — mirroring the read: the headline, wins/regressions/watch-list, the cards with change arrows, and the GA/GSC overlay where present.
 

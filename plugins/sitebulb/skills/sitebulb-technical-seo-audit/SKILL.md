@@ -1,6 +1,6 @@
 ---
-name: technical-seo-audit
-description: "Produce the client-facing technical SEO audit document from a Sitebulb project's latest finished audit: a focused Word working draft of 5–10 issues — never encyclopaedic — selected and ordered by why the audit was commissioned (traffic decline, redesign/migration, onboarding, due diligence), written for the stated reader, each issue carrying its true affected count, labelled sample URLs, a Sitebulb-app export pointer, a knowledge-base link, and a recommendation with owner and indicative effort. Ships seeded with consultant-facing review comments marking where human judgment is needed. Use whenever the user asks for a 'technical SEO audit', 'client audit', 'audit document', or 'audit deliverable', says 'write up the audit for [client]' or 'run the audit on [project]', or hands off from a prioritised read ('need this as a client document'). Not for conversational what-to-fix triage (what-to-fix-first), change-over-time stories (what-changed), or dev tickets (dev-handoff)."
+name: sitebulb-technical-seo-audit
+description: "Produce the client-facing technical SEO audit document from a Sitebulb project's latest finished audit: a focused Word working draft of 5–10 issues — never encyclopaedic — selected and ordered by why the audit was commissioned (traffic decline, redesign/migration, onboarding, due diligence), written for the stated reader, each issue carrying its true affected count, labelled sample URLs, a Sitebulb-app export pointer, a knowledge-base link, and a recommendation with owner and indicative effort. Ships seeded with consultant-facing review comments marking where human judgment is needed. Use whenever the user asks for a 'technical SEO audit', 'client audit', 'audit document', or 'audit deliverable', says 'write up the audit for [client]' or 'run the audit on [project]', or hands off from a prioritised read ('need this as a client document'). Not for conversational what-to-fix triage (sitebulb-what-to-fix-first), change-over-time stories (sitebulb-what-changed), or dev tickets (sitebulb-dev-handoff)."
 ---
 
 # Technical SEO Audit
@@ -81,7 +81,7 @@ The document ships seeded with **consultant-facing review comments** — native 
 
 Comments speak plain SEO — the consultant didn't author this skill either, so the presentation bans apply inside comments too. In the document spec, each comment is a `comment` field on the block it concerns; `scripts/build_docx.py` writes it as a native Word comment anchored to that passage. Only in the no-Python fallback (where the builder cannot run at all), use a visually distinct inline marker style (e.g. highlighted `[REVIEW: …]` paragraphs) the consultant deletes — same content, uglier carrier.
 
-**The covering note** goes in the chat, not the document: this is a working draft; the comments mark where your judgment is needed; check, edit and improve it before it carries your name. Then stay in the conversation — offer to rework an item's framing, swap an item for a demoted one, adjust register for a different reader, or hand off ("want these as dev tickets" → the dev-handoff skill; "what should we tackle first ourselves" → the what-to-fix-first skill).
+**The covering note** goes in the chat, not the document: this is a working draft; the comments mark where your judgment is needed; check, edit and improve it before it carries your name. Then stay in the conversation — offer to rework an item's framing, swap an item for a demoted one, adjust register for a different reader, or hand off ("want these as dev tickets" → the sitebulb-dev-handoff skill; "what should we tackle first ourselves" → the sitebulb-what-to-fix-first skill).
 
 ## Failure modes
 
@@ -96,7 +96,7 @@ Comments speak plain SEO — the consultant didn't author this skill either, so 
 ## Reference
 
 - `references/document-template.md` — the deliverable spec: section-by-section structure, per-item anatomy, the review-comment placements, register calibration. Read before drafting.
-- `scripts/score_effort.py` — the deterministic two-axis scorer shared with what-to-fix-first; call it in steps 3–4, never hand-compute (`scripts/test_score_effort.py` is its suite).
+- `scripts/score_effort.py` — the deterministic two-axis scorer shared with sitebulb-what-to-fix-first; call it in steps 3–4, never hand-compute (`scripts/test_score_effort.py` is its suite).
 - `scripts/build_docx.py` — the stdlib-only Word builder: JSON spec in, `.docx` with native anchored review comments out; spec format documented at the top of the script (`scripts/test_build_docx.py` is its suite). The only delivery path.
 - `references/shared-core.md` — Sitebulb data-handling rules, § Tool binding + preflight, interview ground rules. Read before any data pull.
 - `references/context-emphasis.md` — the reframe rules: type lift/demote, situation lead stories, precedence, gating, refusal default. Read before the interview.

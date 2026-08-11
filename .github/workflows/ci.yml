@@ -18,7 +18,7 @@ jobs:
         run: python3 shared/scripts/test_score_effort.py
 
       - name: Document builder test suite
-        run: python3 plugins/sitebulb/skills/technical-seo-audit/scripts/test_build_docx.py
+        run: python3 plugins/sitebulb/skills/sitebulb-technical-seo-audit/scripts/test_build_docx.py
 
       - name: Shared files in sync
         run: python3 scripts/sync_shared.py --check
@@ -42,11 +42,36 @@ jobs:
             exit 1
           fi
 
-      - name: No stale skill names
+      - name: Skill names are namespaced
         run: |
-          bad=$(grep -rIn 'sitebulb-\(what-to-fix-first\|what-changed\|dev-handoff\|technical-seo-audit\|release-check\)' --exclude-dir=.git . || true)
-          if [ -n "$bad" ]; then
-            echo "Stale pre-rename skill reference found:"
-            echo "$bad"
-            exit 1
-          fi
+          python3 - <<'PY'
+          import re, subprocess, sys
+
+          NAMES = ["what-to-fix-first", "what-changed", "dev-handoff",
+                   "technical-seo-audit", "release-check"]
+          # This file and the changelog history keep the pre-rename names on purpose.
+          SKIP = {"CHANGELOG.md", ".github/workflows/ci.yml"}
+          pattern = re.compile(r"(?<!sitebulb-)\b(" + "|".join(NAMES) + r")\b")
+
+          files = subprocess.run(["git", "ls-files"], capture_output=True,
+                                 text=True, check=True).stdout.split()
+          bad = []
+          for rel in files:
+              if rel in SKIP:
+                  continue
+              if pattern.search(rel):
+                  bad.append(f"{rel}: path is not namespaced")
+                  continue
+              try:
+                  text = open(rel, encoding="utf-8").read()
+              except (UnicodeDecodeError, IsADirectoryError):
+                  continue
+              for n, line in enumerate(text.splitlines(), 1):
+                  if pattern.search(line):
+                      bad.append(f"{rel}:{n}: {line.strip()[:120]}")
+          if bad:
+              print("Un-namespaced skill reference found "
+                    "(every skill name is prefixed with sitebulb-):")
+              print("\n".join(bad))
+              sys.exit(1)
+          PY
