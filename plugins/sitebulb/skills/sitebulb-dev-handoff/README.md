@@ -6,4 +6,4 @@ Turns Sitebulb audit findings into dev-ready tickets in your connected PM tool (
 
 **Needs:** a connected Sitebulb Desktop or Cloud MCP with a finished audit. A PM-tool MCP enables direct ticket creation; without one, the skill produces ready-to-paste markdown ticket bodies instead.
 
-**Hands off to:** `what-to-fix-first` for true impact-vs-effort prioritisation before ticketing.
+**Hands off to:** `sitebulb-what-to-fix-first` for true impact-vs-effort prioritisation before ticketing.

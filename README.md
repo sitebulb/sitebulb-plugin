@@ -75,11 +75,11 @@ The server URL is `https://mcp.sitebulb.com/desktop` for Sitebulb Desktop or `ht
 
 | Skill | What it does | Try |
 |---|---|---|
-| `sitebulb:what-to-fix-first` | Prioritised triage: the 3–5 issue clusters most worth fixing for your business, impact vs effort | "What should I fix first on this site?" |
-| `sitebulb:what-changed` | The change story between your two most recent audits — wins, regressions, watch-list | "What changed since the last crawl?" |
-| `sitebulb:technical-seo-audit` | A focused client-facing audit document (.docx working draft, 5–10 issues) shaped by why the audit was commissioned | "Write up the audit for [client]" |
-| `sitebulb:dev-handoff` | Dev-ready tickets from audit findings, pushed to your connected PM tool | "Send these to Jira" / "Ticket the quick wins" |
-| `sitebulb:release-check` | Your configured post-release watch-list check with thresholds and breach alerts | "Run my Tuesday check" |
+| `sitebulb:sitebulb-what-to-fix-first` | Prioritised triage: the 3–5 issue clusters most worth fixing for your business, impact vs effort | "What should I fix first on this site?" |
+| `sitebulb:sitebulb-what-changed` | The change story between your two most recent audits — wins, regressions, watch-list | "What changed since the last crawl?" |
+| `sitebulb:sitebulb-technical-seo-audit` | A focused client-facing audit document (.docx working draft, 5–10 issues) shaped by why the audit was commissioned | "Write up the audit for [client]" |
+| `sitebulb:sitebulb-dev-handoff` | Dev-ready tickets from audit findings, pushed to your connected PM tool | "Send these to Jira" / "Ticket the quick wins" |
+| `sitebulb:sitebulb-release-check` | Your configured post-release watch-list check with thresholds and breach alerts | "Run my Tuesday check" |
 
 Skills trigger automatically when you ask for the matching work — you don't need to invoke them by name.
 
@@ -87,9 +87,9 @@ Skills trigger automatically when you ask for the matching work — you don't ne
 
 Some features light up when other tools are connected:
 
-- **A PM-tool MCP** (Jira, Linear, Asana, Monday, ClickUp) lets `dev-handoff` create tickets directly. Without one, it produces ready-to-paste markdown ticket bodies.
-- **A messaging MCP** (Slack, Teams, …) lets `release-check` post breach alerts to a channel. Without one, alerts appear in chat.
-- **Google Analytics / Search Console connected inside Sitebulb** lets `what-to-fix-first` and `technical-seo-audit` weight priorities by real traffic, and gives `what-changed` a search-performance overlay.
+- **A PM-tool MCP** (Jira, Linear, Asana, Monday, ClickUp) lets `sitebulb-dev-handoff` create tickets directly. Without one, it produces ready-to-paste markdown ticket bodies.
+- **A messaging MCP** (Slack, Teams, …) lets `sitebulb-release-check` post breach alerts to a channel. Without one, alerts appear in chat.
+- **Google Analytics / Search Console connected inside Sitebulb** lets `sitebulb-what-to-fix-first` and `sitebulb-technical-seo-audit` weight priorities by real traffic, and gives `sitebulb-what-changed` a search-performance overlay.
 
 ## Licence
 

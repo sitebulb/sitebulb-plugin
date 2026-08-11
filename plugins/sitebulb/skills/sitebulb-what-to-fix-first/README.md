@@ -6,4 +6,4 @@ Prioritised triage of a Sitebulb audit: the 3–5 issue clusters most worth fixi
 
 **Needs:** a connected Sitebulb Desktop or Cloud MCP with a finished audit. Google Analytics / Search Console connected inside Sitebulb sharpens the ranking with real traffic data (optional).
 
-**Hands off to:** `dev-handoff` (raise tickets), `technical-seo-audit` (client document), `what-changed` (change over time).
+**Hands off to:** `sitebulb-dev-handoff` (raise tickets), `sitebulb-technical-seo-audit` (client document), `sitebulb-what-changed` (change over time).

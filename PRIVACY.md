@@ -26,9 +26,9 @@ builder) that run locally using only the Python standard library.
    read-only connection. Sitebulb's handling of that data is governed by the
    [Sitebulb privacy policy](https://sitebulb.com/policies/cookie-and-privacy-policy/).
 
-3. **Optional integrations you connect.** The `dev-handoff` skill can create
+3. **Optional integrations you connect.** The `sitebulb-dev-handoff` skill can create
    tickets through a project-management MCP (Jira, Linear, Asana, Monday,
-   ClickUp) and `release-check` can post alerts through a messaging MCP
+   ClickUp) and `sitebulb-release-check` can post alerts through a messaging MCP
    (Slack, Teams). These are used only when you invoke the matching skill and
    are governed by those services' own policies. If you do not connect them,
    nothing is sent to them.

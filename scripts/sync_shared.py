@@ -35,14 +35,14 @@ SCRIPTS_ALL = ["score_effort.py", "test_score_effort.py"]
 # Which shared files each skill consumes. Skill-local files
 # (document-template.md, pm-tool-mapping.md) are never touched.
 MANIFEST: dict[str, dict[str, list[str]]] = {
-    "what-to-fix-first": {"references": REFERENCES_ALL, "scripts": SCRIPTS_ALL},
-    "what-changed": {"references": REFERENCES_ALL, "scripts": SCRIPTS_ALL},
-    "technical-seo-audit": {"references": REFERENCES_ALL, "scripts": SCRIPTS_ALL},
-    "dev-handoff": {
+    "sitebulb-what-to-fix-first": {"references": REFERENCES_ALL, "scripts": SCRIPTS_ALL},
+    "sitebulb-what-changed": {"references": REFERENCES_ALL, "scripts": SCRIPTS_ALL},
+    "sitebulb-technical-seo-audit": {"references": REFERENCES_ALL, "scripts": SCRIPTS_ALL},
+    "sitebulb-dev-handoff": {
         "references": ["shared-core.md", "effort-scoring.md", "hint-map.csv"],
         "scripts": SCRIPTS_ALL,
     },
-    "release-check": {"references": ["shared-core.md"], "scripts": []},
+    "sitebulb-release-check": {"references": ["shared-core.md"], "scripts": []},
 }
 
 

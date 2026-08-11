@@ -6,4 +6,4 @@ The post-release ritual: release goes out, the scheduled crawl finishes, you say
 
 **Needs:** a connected Sitebulb Desktop or Cloud MCP with two finished audits (your crawls scheduled in Sitebulb). A messaging MCP (Slack, Teams, …) enables channel alerts; without one, alerts appear in chat. Strictly user-invoked — it cannot schedule itself or trigger crawls.
 
-**Hands off to:** `what-changed` (the full change story), `dev-handoff` (tickets), `what-to-fix-first` (sizing and prioritisation).
+**Hands off to:** `sitebulb-what-changed` (the full change story), `sitebulb-dev-handoff` (tickets), `sitebulb-what-to-fix-first` (sizing and prioritisation).

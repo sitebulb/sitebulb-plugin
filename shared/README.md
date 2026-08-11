@@ -17,4 +17,4 @@ Never edit a skill's copy directly; CI fails on drift (`sync_shared.py --check`)
 - `scripts/score_effort.py` — the deterministic two-axis scorer implementing `effort-scoring.md`.
 - `scripts/test_score_effort.py` — its test suite (`python3 scripts/test_score_effort.py`).
 
-Skill-local files (`technical-seo-audit/references/document-template.md`, `dev-handoff/references/pm-tool-mapping.md`) are not shared and are never touched by the sync.
+Skill-local files (`sitebulb-technical-seo-audit/references/document-template.md`, `sitebulb-dev-handoff/references/pm-tool-mapping.md`) are not shared and are never touched by the sync.

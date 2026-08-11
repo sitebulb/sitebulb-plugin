@@ -1,6 +1,6 @@
 ---
-name: what-to-fix-first
-description: "Produce a prioritised read of a Sitebulb audit — the 3–5 issue clusters most worth fixing for this business in this situation — by interviewing for business context, sweeping triggered hints, and scoring impact (severity × section tier × effective coverage × traffic linkage) against effort (fix archetype, S–XL, owner, indicative duration), with context reframing what leads but never the scores. Use for \"what should I fix first\", \"what's wrong with this site\", \"where do I start\", \"prioritise this crawl/audit\", \"quick wins\", \"what's worth my attention\", or any effort-vs-impact triage of Sitebulb findings. Not for raising dev tickets (dev-handoff), change-over-time stories (what-changed), or client documents (technical-seo-audit)."
+name: sitebulb-what-to-fix-first
+description: "Produce a prioritised read of a Sitebulb audit — the 3–5 issue clusters most worth fixing for this business in this situation — by interviewing for business context, sweeping triggered hints, and scoring impact (severity × section tier × effective coverage × traffic linkage) against effort (fix archetype, S–XL, owner, indicative duration), with context reframing what leads but never the scores. Use for \"what should I fix first\", \"what's wrong with this site\", \"where do I start\", \"prioritise this crawl/audit\", \"quick wins\", \"what's worth my attention\", or any effort-vs-impact triage of Sitebulb findings. Not for raising dev tickets (sitebulb-dev-handoff), change-over-time stories (sitebulb-what-changed), or client documents (sitebulb-technical-seo-audit)."
 ---
 
 # What To Fix First
@@ -63,7 +63,7 @@ Ask once, up front, before any data pull — one round only, per the shared-core
    - Footer: the export pointer ("Full list (N URLs): export from this hint's Affected URLs view in the Sitebulb app") and the Learn More link (`learnMoreUrl`).
 
    Render the cards with whatever inline visual/rich output the assistant supports; where none is available, the same card as clean markdown (heading, stat line, sample list, footer) — the content is identical either way (portability rule 3).
-8. **Stay in the conversation.** The read is an opening, not a terminus. Offer guided next explorations tied to what was found ("dig into the canonical cluster?", "see which of these touch your top-traffic pages?", "want the demoted items too?"). Hand off when asked: "want these as dev tickets" → the dev-handoff skill; "need this as a client document" → the technical-seo-audit skill.
+8. **Stay in the conversation.** The read is an opening, not a terminus. Offer guided next explorations tied to what was found ("dig into the canonical cluster?", "see which of these touch your top-traffic pages?", "want the demoted items too?"). Hand off when asked: "want these as dev tickets" → the sitebulb-dev-handoff skill; "need this as a client document" → the sitebulb-technical-seo-audit skill.
 
 ## Failure modes
 
