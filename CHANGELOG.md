@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0 — 2026-11-10
+
+- The `sitebulb` plugin is split into two plugins, `sitebulb-desktop` and `sitebulb-cloud`. `sitebulb` 0.2.0 is the last release of the combined plugin, and `plugins/sitebulb` is removed from the repository and from the Claude, Codex and Cursor marketplace files.
+- Each plugin declares one remote MCP server with OAuth sign-in and no headers: `sitebulb-desktop` connects to `https://desktop.mcp.sitebulb.com/mcp` and `sitebulb-cloud` connects to `https://cloud.mcp.sitebulb.com/mcp`. A customer installs the plugin for their product and connects that product in one step.
+- Both plugins have the same five skills. `shared/` is the only source: `scripts/sync_shared.py` generates the skills, the licence and the logo of each plugin, and CI fails when a generated file differs or no source produces it.
+- Existing users: uninstall `sitebulb`, then install `sitebulb-desktop` or `sitebulb-cloud` for your product (see the README).
+- CI runs `claude plugin validate` on each plugin, and the endpoint guard now permits the two plugin URLs as well as the two custom-connector URLs.
+
 ## 0.2.0 — 2026-08-11
 
 - All five skills renamed with a `sitebulb-` prefix so they cannot be confused with similarly named skills a user already has installed: `sitebulb-what-to-fix-first`, `sitebulb-what-changed`, `sitebulb-technical-seo-audit`, `sitebulb-dev-handoff`, `sitebulb-release-check`. Skill directories, frontmatter `name` fields, cross-references, `scripts/sync_shared.py` and the README were all updated to match. The CI step that failed on `sitebulb-` prefixed names is replaced by one that fails on un-prefixed ones.

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "sitebulb-desktop": {
+      "type": "http",
+      "url": "https://desktop.mcp.sitebulb.com/mcp"
+    }
+  }
+}

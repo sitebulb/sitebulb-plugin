@@ -11,6 +11,8 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    env:
+      CLAUDE_CODE_VERSION: 2.1.311
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
@@ -18,26 +20,97 @@ jobs:
         run: python3 shared/scripts/test_score_effort.py
 
       - name: Document builder test suite
-        run: python3 plugins/sitebulb/skills/sitebulb-technical-seo-audit/scripts/test_build_docx.py
+        run: python3 shared/skills/sitebulb-technical-seo-audit/scripts/test_build_docx.py
 
       - name: Shared files in sync
         run: python3 scripts/sync_shared.py --check
 
       - name: Manifests are valid JSON
         run: |
-          python3 -m json.tool .claude-plugin/marketplace.json > /dev/null
-          python3 -m json.tool .cursor-plugin/marketplace.json > /dev/null
-          python3 -m json.tool .agents/plugins/marketplace.json > /dev/null
-          python3 -m json.tool plugins/sitebulb/.claude-plugin/plugin.json > /dev/null
-          python3 -m json.tool plugins/sitebulb/.codex-plugin/plugin.json > /dev/null
-          python3 -m json.tool plugins/sitebulb/.cursor-plugin/plugin.json > /dev/null
+          set -e
+          for f in $(git ls-files '*.json'); do
+            python3 -m json.tool "$f" > /dev/null || { echo "Invalid JSON: $f"; exit 1; }
+          done
+
+      - name: Each plugin declares its one MCP server and is listed everywhere
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          from pathlib import Path
+
+          URLS = {
+              "sitebulb-desktop": "https://desktop.mcp.sitebulb.com/mcp",
+              "sitebulb-cloud": "https://cloud.mcp.sitebulb.com/mcp",
+          }
+          MANIFESTS = [".claude-plugin", ".codex-plugin", ".cursor-plugin"]
+          load = lambda p: json.loads(Path(p).read_text(encoding="utf-8"))
+          bad = []
+
+          folders = sorted(p.name for p in Path("plugins").iterdir() if p.is_dir())
+          if folders != sorted(URLS):
+              bad.append(f"plugins/ holds {folders}, expected {sorted(URLS)}")
+
+          for name, url in URLS.items():
+              root = Path("plugins") / name
+              servers = load(root / ".mcp.json").get("mcpServers", {})
+              if len(servers) != 1:
+                  bad.append(f"{name}: .mcp.json declares {len(servers)} servers, expected 1")
+              for key, server in servers.items():
+                  if server.get("type") != "http" or server.get("url") != url:
+                      bad.append(f"{name}: server {key} is not type http at {url}")
+                  if server.get("headers") or "clientSecret" in json.dumps(server):
+                      bad.append(f"{name}: server {key} has headers or a clientSecret")
+              versions = set()
+              for m in MANIFESTS:
+                  data = load(root / m / "plugin.json")
+                  versions.add(data.get("version"))
+                  if data.get("name") != name:
+                      bad.append(f"{name}: {m}/plugin.json name is {data.get('name')!r}")
+                  if m != ".claude-plugin" and data.get("mcpServers") != "./.mcp.json":
+                      bad.append(f"{name}: {m}/plugin.json mcpServers is not ./.mcp.json")
+              if len(versions) != 1:
+                  bad.append(f"{name}: manifest versions differ: {sorted(map(str, versions))}")
+
+          for path in [".claude-plugin/marketplace.json", ".cursor-plugin/marketplace.json",
+                       ".agents/plugins/marketplace.json"]:
+              listed = sorted(p["name"] for p in load(path)["plugins"])
+              if listed != sorted(URLS):
+                  bad.append(f"{path} lists {listed}, expected {sorted(URLS)}")
+
+          if bad:
+              print("Plugin manifest problems:", *bad, sep="\n  ")
+              sys.exit(1)
+          print("Both plugins declare one MCP server and every marketplace lists both.")
+          PY
+
+      - name: claude plugin validate
+        env:
+          DISABLE_AUTOUPDATER: "1"
+          CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
+        run: |
+          set -e
+          npm install --no-save --no-audit --no-fund --prefix "$RUNNER_TEMP/claude-code" \
+            "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION"
+          claude="$RUNNER_TEMP/claude-code/node_modules/.bin/claude"
+          "$claude" --version
+          "$claude" plugin validate --strict .
+          for plugin in plugins/*/; do
+            "$claude" plugin validate --profile directory --strict "$plugin"
+          done
 
       - name: Only approved MCP endpoints referenced
         run: |
-          bad=$(grep -rIn 'mcp\.sitebulb\.com' --exclude-dir=.git . \
-            | grep -vE 'mcp\.sitebulb\.com/(desktop|cloud)([^a-z]|$)' || true)
+          # Every Sitebulb MCP address must be one of the two plugin servers or
+          # the two custom-connector servers. Each address is checked on its
+          # own, so an approved address cannot hide another one on the same line.
+          refs=$(grep -rIonE --exclude-dir=.git \
+            '[A-Za-z0-9.-]*mcp\.sitebulb\.com[A-Za-z0-9/._~%-]*' . || true)
+          bad=$(printf '%s\n' "$refs" | sed -E 's/\.+$//' | grep -v '^$' \
+            | grep -vE ':((desktop|cloud)\.mcp\.sitebulb\.com/mcp|mcp\.sitebulb\.com/(desktop|cloud))$' \
+            || true)
           if [ -n "$bad" ]; then
-            echo "Disallowed MCP gateway reference (only the /desktop and /cloud endpoints are public):"
+            echo "Disallowed MCP address (only desktop.mcp.sitebulb.com/mcp, cloud.mcp.sitebulb.com/mcp,"
+            echo "mcp.sitebulb.com/desktop and mcp.sitebulb.com/cloud are public):"
             echo "$bad"
             exit 1
           fi
