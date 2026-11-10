@@ -37,7 +37,11 @@ The plugin declares one remote MCP server, `https://desktop.mcp.sitebulb.com/mcp
 - Your assistant reads audit data from the MCP server above. Your assistant also sends prompts, and the audit data that the skills read, to its model provider.
 - `sitebulb-dev-handoff` and `sitebulb-release-check` can write to a project-management or messaging tool, but only one that you connected yourself.
 
-Privacy and security details: [PRIVACY.md](https://github.com/sitebulb/sitebulb-plugin/blob/main/PRIVACY.md) and [SECURITY.md](https://github.com/sitebulb/sitebulb-plugin/blob/main/SECURITY.md).
+Privacy and security details: [PRIVACY.md](https://github.com/sitebulb/sitebulb-plugin/blob/main/PRIVACY.md) and [SECURITY.md](https://github.com/sitebulb/sitebulb-plugin/blob/main/SECURITY.md). The Sitebulb privacy policy is at https://sitebulb.com/policies/cookie-and-privacy-policy/.
+
+## Support
+
+For help, go to https://sitebulb.com/support/ or email support@sitebulb.com.
 
 ## Licence
 
