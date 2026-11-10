@@ -103,9 +103,14 @@ jobs:
           # Every Sitebulb MCP address must be one of the two plugin servers or
           # the two custom-connector servers. Each address is checked on its
           # own, so an approved address cannot hide another one on the same line.
-          refs=$(grep -rIonE --exclude-dir=.git \
-            '[A-Za-z0-9.-]*mcp\.sitebulb\.com[A-Za-z0-9/._~%-]*' . || true)
-          bad=$(printf '%s\n' "$refs" | sed -E 's/\.+$//' | grep -v '^$' \
+          # The search ignores case, because a host name is case-insensitive,
+          # but the allow-list is not: an address must be written exactly as
+          # below, in lower case. A port, query, fragment or non-ASCII character
+          # stays part of the address, so it also fails the allow-list.
+          refs=$(LC_ALL=C grep -rIoniE --exclude-dir=.git \
+            '[a-z0-9.-]*mcp\.sitebulb\.com([a-z0-9/._~%?#=&:@+-]|[^[:print:][:space:]])*' . \
+            || true)
+          bad=$(printf '%s\n' "$refs" | LC_ALL=C sed -E 's/\.+$//' | grep -v '^$' \
             | grep -vE ':((desktop|cloud)\.mcp\.sitebulb\.com/mcp|mcp\.sitebulb\.com/(desktop|cloud))$' \
             || true)
           if [ -n "$bad" ]; then

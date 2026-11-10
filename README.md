@@ -19,7 +19,10 @@ Install the plugin for the product you use. If you use both products, you can in
 
 The `sitebulb` plugin (last release 0.2.0) is replaced by `sitebulb-desktop` and `sitebulb-cloud`. If you installed `sitebulb`:
 
-1. Uninstall `sitebulb` (in Claude Code: `/plugin uninstall sitebulb@sitebulb`). If you keep it, your assistant has each skill two times.
+1. Uninstall `sitebulb`. If you keep it, your assistant has each skill two times.
+   - **Claude Code:** `/plugin uninstall sitebulb@sitebulb`, or `claude plugin uninstall sitebulb@sitebulb` from a terminal.
+   - **Codex:** in the Codex app, open the plugin and select **Uninstall plugin**. In Codex CLI, enter `/plugins` and uninstall **Sitebulb** in the plugin browser.
+   - **Cursor, GitHub Copilot and other agents:** remove it in the plugin settings of your assistant. In Cursor, installed plugins are under **Customize** in the sidebar.
 2. Install `sitebulb-desktop` or `sitebulb-cloud` for your product, as shown below.
 3. If you added the Sitebulb MCP to your assistant yourself, for example as a custom connector, remove it. The new plugin connects its own server, and two connections give your assistant two sets of the same tools.
 

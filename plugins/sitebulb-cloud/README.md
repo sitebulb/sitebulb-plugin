@@ -9,8 +9,11 @@ For audits in Sitebulb Desktop, install the `sitebulb-desktop` plugin instead.
 In Claude Code:
 
 ```
-/plugin install sitebulb-cloud --marketplace sitebulb/sitebulb-plugin
+/plugin marketplace add sitebulb/sitebulb-plugin
+/plugin install sitebulb-cloud@sitebulb
 ```
+
+From a terminal, `claude plugin install sitebulb-cloud --marketplace sitebulb/sitebulb-plugin` does the same in one step.
 
 The [repository README](https://github.com/sitebulb/sitebulb-plugin#installation) gives the install steps for Codex, Cursor, GitHub Copilot and other agents. If you installed the earlier `sitebulb` plugin, uninstall it first.
 
