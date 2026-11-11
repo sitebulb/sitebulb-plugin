@@ -1,0 +1,1 @@
+Added AGENTS.md and CLAUDE.md with instructions for coding agents. The instructions say that this repository is public, so commits and pull requests must not hold internal details. They also list the CI checks to run before a push.
