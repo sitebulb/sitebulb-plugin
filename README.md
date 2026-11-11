@@ -123,7 +123,48 @@ MIT — see [LICENSE](LICENSE). © Sitebulb Ltd.
 
 Each plugin has the text for two directory listings:
 
-- **OpenAI plugin directory:** `.codex-plugin/plugin.json` holds the listing fields in `interface`, and the review test cases and release notes in `extensions.com.openai`. The upload ZIP for each plugin is its plugin folder. This repository uses the Codex format only, so CI refuses a root `plugin.json` or `mcp.json` in a plugin folder. A root `plugin.json` with an `extensions.com.openai` object replaces the OpenAI settings in `.codex-plugin/plugin.json`, and a root `mcp.json` is a second MCP declaration.
+- **OpenAI plugin directory:** `.codex-plugin/plugin.json` holds the listing fields in `interface`, and the review test cases and release notes in `extensions.com.openai`. The release workflow builds the upload ZIP for each plugin from its plugin folder (see [Making a release](#making-a-release)). This repository uses the Codex format only, so CI refuses a root `plugin.json` or `mcp.json` in a plugin folder. A root `plugin.json` with an `extensions.com.openai` object replaces the OpenAI settings in `.codex-plugin/plugin.json`, and a root `mcp.json` is a second MCP declaration.
 - **Anthropic connector directory:** `LISTING.md` holds the name, one-liner, description and links for the Listing step of the Claude developer portal.
 
 CI checks both against the published character limits and URL rules. Before an upload, replace the `demo_recording_url` placeholder with the URL of the walkthrough video.
+
+### Change fragments
+
+Each pull request adds a change fragment, a file in [`changes/`](changes/README.md) with one sentence or more for the changelog:
+
+```bash
+python3 scripts/changes.py new --kind fixed --message "Corrected the Cloud plugin's support URL."
+```
+
+CI fails a pull request that changes files and adds no fragment. A change to `CHANGELOG.md` alone, or the version changes that `scripts/release.py prepare` makes, needs no fragment.
+
+### Making a release
+
+1. On a branch from `main`, run `python3 scripts/release.py prepare <X.Y.Z>`. The command does these steps:
+   - It sets the version in each plugin's three manifests and in `.cursor-plugin/marketplace.json`.
+   - It adds a `## <X.Y.Z> — <date>` section with the text of each fragment to the top of `CHANGELOG.md`.
+   - It writes the same text, after `<X.Y.Z>: `, to `publication.release_notes` in both Codex manifests.
+   - It deletes the fragments.
+2. Read the new `CHANGELOG.md` section. OpenAI shows the release notes to its reviewers, so edit the section and the two `release_notes` fields together if necessary.
+3. Before the release goes to OpenAI, set `demo_recording_url` in both Codex manifests to the URL of the walkthrough video. The release check refuses the placeholder.
+4. Open a pull request and merge it.
+5. Tag the merge commit on `main` and push the tag:
+
+   ```bash
+   git tag v<X.Y.Z> origin/main
+   git push origin v<X.Y.Z>
+   ```
+
+6. The tag starts the Release workflow. The workflow fails when the tagged commit is not on `main`, or when a version field is not `<X.Y.Z>`. Then it builds `sitebulb-desktop-<X.Y.Z>.zip` and `sitebulb-cloud-<X.Y.Z>.zip` and checks each ZIP. The check fails on these items:
+   - A secret that gitleaks finds.
+   - An `apps` or `hooks` folder, a `.app.json` or `hooks.json` file, or a manifest that declares `apps` or `hooks`.
+   - A `demo_recording_url` that is not an `https://` URL.
+7. The workflow attaches the ZIPs and their `.sha256` files to a draft GitHub release for the tag. Download each ZIP, upload it to the OpenAI plugin portal, then publish the draft release. The workflow uploads nothing to OpenAI or Anthropic.
+
+Each ZIP holds the contents of the plugin folder at the ZIP root, without `LISTING.md`. You can run the same steps on your computer, with gitleaks installed:
+
+```bash
+python3 scripts/release.py check-tag v<X.Y.Z>
+python3 scripts/release.py build <X.Y.Z> --out dist
+python3 scripts/check_zip.py --version <X.Y.Z> dist/*.zip
+```

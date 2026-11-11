@@ -1,0 +1,1 @@
+Added change fragments and a release workflow. scripts/release.py prepare sets the version in every manifest and writes the release notes. A v* tag on main builds and checks the two plugin ZIPs and attaches them, with their SHA-256 sums, to a draft GitHub release.

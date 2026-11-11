@@ -1,0 +1,72 @@
+# On a v* tag on main: check the tag against every version field, build one
+# ZIP for each plugin, check each ZIP for what the OpenAI plugin directory
+# refuses, and attach the ZIPs and their SHA-256 sums to a DRAFT release.
+# A person publishes the release and uploads the ZIPs to the portals.
+# The steps are scripts in scripts/, so a person can run the same code.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # check-tag --on reads origin/main
+
+      - name: The tag is on main and is the version in every version field
+        run: python3 scripts/release.py check-tag "$GITHUB_REF_NAME" --on origin/main
+
+      - name: Build the plugin ZIPs
+        run: python3 scripts/release.py build "${GITHUB_REF_NAME#v}" --out dist
+
+      - name: Install gitleaks
+        run: scripts/install_gitleaks.sh "$RUNNER_TEMP/bin"
+
+      - name: Check the ZIPs
+        run: |
+          python3 scripts/check_zip.py --gitleaks "$RUNNER_TEMP/bin/gitleaks" \
+            --version "${GITHUB_REF_NAME#v}" dist/*.zip
+          (cd dist && sha256sum -c ./*.sha256)
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: plugin-zips
+          path: dist/
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # creates the draft release and uploads the assets
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: plugin-zips
+          path: dist
+
+      - name: Attach the ZIPs to a draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          tag="$GITHUB_REF_NAME"
+          if draft=$(gh release view "$tag" --json isDraft --jq .isDraft 2>/dev/null); then
+            if [ "$draft" != "true" ]; then
+              echo "Release $tag is published. The workflow changes only a draft release."
+              exit 1
+            fi
+          else
+            gh release create "$tag" --draft --verify-tag --title "Sitebulb plugins $tag" \
+              --notes "Draft made by the Release workflow. The notes for ${tag#v} are in CHANGELOG.md. Upload each ZIP to the OpenAI plugin portal, then publish this release."
+          fi
+          gh release upload "$tag" dist/* --clobber
+          gh release view "$tag" --json assets --jq '.assets[].name'
