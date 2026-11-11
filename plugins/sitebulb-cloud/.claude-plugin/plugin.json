@@ -1,0 +1,20 @@
+{
+  "name": "sitebulb-cloud",
+  "displayName": "Sitebulb Cloud",
+  "version": "1.0.0",
+  "description": "Technical SEO skills and read-only access to your Sitebulb Cloud audits: audit summaries, hints and insights, URL-level data, change-over-time comparisons, prioritised fixes, client audit documents and dev tickets.",
+  "author": {
+    "name": "Sitebulb Ltd",
+    "url": "https://sitebulb.com"
+  },
+  "homepage": "https://github.com/sitebulb/sitebulb-plugin",
+  "repository": "https://github.com/sitebulb/sitebulb-plugin",
+  "license": "MIT",
+  "keywords": [
+    "seo",
+    "technical-seo",
+    "sitebulb",
+    "site-audit",
+    "crawler"
+  ]
+}
