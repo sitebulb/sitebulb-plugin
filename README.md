@@ -117,4 +117,13 @@ MIT — see [LICENSE](LICENSE). © Sitebulb Ltd.
 
 ## Contributing / maintenance
 
-`plugins/sitebulb-desktop/` and `plugins/sitebulb-cloud/` must each be complete on their own: the plugin directories install, validate and package one plugin folder at a time, and refuse symbolic links and paths outside the folder. So each plugin carries a copy of the skills, the licence and the logo, generated from [`shared/`](shared/README.md). Edit there and run `python3 scripts/sync_shared.py`. Each plugin's manifests, `.mcp.json` and `README.md` are written by hand. CI enforces sync, runs the test suites, validates the manifests, and runs `claude plugin validate` on each plugin.
+`plugins/sitebulb-desktop/` and `plugins/sitebulb-cloud/` must each be complete on their own: the plugin directories install, validate and package one plugin folder at a time, and refuse symbolic links and paths outside the folder. So each plugin carries a copy of the skills, the licence and the logo, generated from [`shared/`](shared/README.md). Edit there and run `python3 scripts/sync_shared.py`. Each plugin's manifests, `.mcp.json`, `README.md` and `LISTING.md` are written by hand. CI enforces sync, runs the test suites, validates the manifests, and runs `claude plugin validate` on each plugin.
+
+### Directory listings
+
+Each plugin has the text for two directory listings:
+
+- **OpenAI plugin directory:** `.codex-plugin/plugin.json` holds the listing fields in `interface`, and the review test cases and release notes in `extensions.com.openai`. The upload ZIP for each plugin is its plugin folder. This repository uses the Codex format only, so CI refuses a root `plugin.json` or `mcp.json` in a plugin folder. A root `plugin.json` with an `extensions.com.openai` object replaces the OpenAI settings in `.codex-plugin/plugin.json`, and a root `mcp.json` is a second MCP declaration.
+- **Anthropic connector directory:** `LISTING.md` holds the name, one-liner, description and links for the Listing step of the Claude developer portal.
+
+CI checks both against the published character limits and URL rules. Before an upload, replace the `demo_recording_url` placeholder with the URL of the walkthrough video.

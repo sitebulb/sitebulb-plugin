@@ -10,6 +10,7 @@
   "homepage": "https://github.com/sitebulb/sitebulb-plugin",
   "repository": "https://github.com/sitebulb/sitebulb-plugin",
   "license": "MIT",
+  "privacyPolicyUrl": "https://sitebulb.com/policies/cookie-and-privacy-policy/",
   "keywords": [
     "seo",
     "technical-seo",

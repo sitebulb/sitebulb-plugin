@@ -19,4 +19,4 @@ Never edit a plugin's copy directly; CI fails on drift (`sync_shared.py --check`
 - `scripts/test_score_effort.py` — its test suite (`python3 shared/scripts/test_score_effort.py`).
 - `assets/logo.png` — the logo of both plugins.
 
-The repository root `LICENSE` is also copied into each plugin. Each plugin's manifests (`.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`), `.mcp.json` and `README.md` differ between the plugins, so they are written by hand in the plugin folder and the sync never touches them.
+The repository root `LICENSE` is also copied into each plugin. Each plugin's manifests (`.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`), `.mcp.json`, `README.md` and `LISTING.md` differ between the plugins, so they are written by hand in the plugin folder and the sync never touches them.
