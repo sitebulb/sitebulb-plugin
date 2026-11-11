@@ -1,0 +1,41 @@
+{
+  "name": "sitebulb-desktop",
+  "version": "1.0.0",
+  "description": "Technical SEO skills and read-only access to your Sitebulb Desktop audits: audit summaries, hints and insights, URL-level data, change-over-time comparisons, prioritised fixes, client audit documents and dev tickets.",
+  "author": {
+    "name": "Sitebulb Ltd"
+  },
+  "homepage": "https://sitebulb.com",
+  "repository": "https://github.com/sitebulb/sitebulb-plugin",
+  "license": "MIT",
+  "keywords": [
+    "seo",
+    "technical-seo",
+    "sitebulb",
+    "site-audit",
+    "crawler"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Sitebulb Desktop",
+    "category": "Productivity",
+    "shortDescription": "Technical-SEO skills powered by your Sitebulb Desktop audits",
+    "longDescription": "Five technical-SEO skills that work with your Sitebulb Desktop audits: prioritise fixes, track changes between crawls, produce client-facing audit documents, raise dev tickets, and run post-release checks. The plugin connects to Sitebulb Desktop through its MCP server, with OAuth sign-in to your Sitebulb account. For Sitebulb Cloud audits, install the Sitebulb Cloud plugin.",
+    "developerName": "Sitebulb Ltd",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/sitebulb/sitebulb-plugin",
+    "privacyPolicyURL": "https://sitebulb.com/policies/cookie-and-privacy-policy/",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png",
+    "defaultPrompt": [
+      "What should I fix first on this site?",
+      "What changed since the last crawl?",
+      "Write up the audit for my client"
+    ]
+  }
+}
