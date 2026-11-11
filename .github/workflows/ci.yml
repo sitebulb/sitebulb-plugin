@@ -97,6 +97,7 @@ jobs:
                         "Finance", "Healthcare", "Travel", "Entertainment", "Other"}
           URL_FIELDS = ["websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"]
           POSITIVE = ["description", "prompt", "tools_triggered", "expected_behavior"]
+          DEMO_PLACEHOLDER = "TODO: unlisted video URL"
           load = lambda p: json.loads(Path(p).read_text(encoding="utf-8"))
           bad = []
 
@@ -172,6 +173,16 @@ jobs:
               for key in ("test_credentials", "reviewer_instructions"):
                   if key in json.dumps(codex):
                       bad.append(f"{name}: the manifest holds {key}; OpenAI rejects it in the ZIP")
+              # Optional in the ZIP, required for MCP review. Accept an https:// URL,
+              # or the placeholder with a warning until the video exists.
+              demo = review.get("demo_recording_url")
+              if demo == DEMO_PLACEHOLDER:
+                  print(f"warning: {name}: demo_recording_url is the placeholder "
+                        f"{DEMO_PLACEHOLDER!r}; replace it with the video URL before Submit for review")
+              elif not (isinstance(demo, str) and urlsplit(demo).scheme == "https"
+                        and urlsplit(demo).hostname and " " not in demo):
+                  bad.append(f"{name}: demo_recording_url {demo!r} is not an https:// URL "
+                             f"or the placeholder {DEMO_PLACEHOLDER!r}")
               notes = openai.get("publication", {}).get("release_notes", "")
               if not notes.startswith(f"{codex.get('version')}:"):
                   bad.append(f"{name}: release_notes does not start with '{codex.get('version')}:'")

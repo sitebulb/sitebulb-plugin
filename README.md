@@ -123,7 +123,7 @@ MIT — see [LICENSE](LICENSE). © Sitebulb Ltd.
 
 Each plugin has the text for two directory listings:
 
-- **OpenAI plugin directory:** `.codex-plugin/plugin.json` holds the listing fields in `interface`, and the review test cases and release notes in `extensions.com.openai`. The upload ZIP for each plugin is its plugin folder. Do not add a root `plugin.json` or `mcp.json` to a plugin folder: OpenAI then ignores the OpenAI settings in `.codex-plugin/plugin.json`.
+- **OpenAI plugin directory:** `.codex-plugin/plugin.json` holds the listing fields in `interface`, and the review test cases and release notes in `extensions.com.openai`. The upload ZIP for each plugin is its plugin folder. This repository uses the Codex format only, so CI refuses a root `plugin.json` or `mcp.json` in a plugin folder. A root `plugin.json` with an `extensions.com.openai` object replaces the OpenAI settings in `.codex-plugin/plugin.json`, and a root `mcp.json` is a second MCP declaration.
 - **Anthropic connector directory:** `LISTING.md` holds the name, one-liner, description and links for the Listing step of the Claude developer portal.
 
 CI checks both against the published character limits and URL rules. Before an upload, replace the `demo_recording_url` placeholder with the URL of the walkthrough video.
