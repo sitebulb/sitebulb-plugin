@@ -7,6 +7,10 @@
 - Both plugins have the same five skills. `shared/` is the only source: `scripts/sync_shared.py` generates the skills, the licence and the logo of each plugin, and CI fails when a generated file differs or no source produces it.
 - Existing users: uninstall `sitebulb`, then install `sitebulb-desktop` or `sitebulb-cloud` for your product (see the README).
 - CI runs `claude plugin validate` on each plugin, and the endpoint guard now permits the two plugin URLs as well as the two custom-connector URLs.
+- The Codex manifest of each plugin now meets the OpenAI directory rules. `shortDescription` is "Technical SEO audit insights" (28 characters). The four listing URLs are pages on sitebulb.com, and the terms URL is the Desktop licence for `sitebulb-desktop` and the Cloud terms for `sitebulb-cloud`. `capabilities` is `["Read"]`, because every Sitebulb MCP tool is read-only. The category is "Data & Analytics" in the manifests and in `.agents/plugins/marketplace.json`.
+- Each Codex manifest holds the OpenAI review material: five positive and three negative test cases, a placeholder for the demo video URL, and the 1.0.0 release notes.
+- Each Claude manifest sets `privacyPolicyUrl` to the Sitebulb privacy policy, and each plugin has a `LISTING.md` with the text for its Anthropic connector listing.
+- CI checks the OpenAI listing fields, the review test cases and `LISTING.md` against the published limits, and fails when a plugin folder has a root `plugin.json` or `mcp.json`.
 
 ## 0.2.0 — 2026-08-11
 

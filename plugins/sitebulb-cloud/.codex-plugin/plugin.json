@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Technical SEO skills and read-only access to your Sitebulb Cloud audits: audit summaries, hints and insights, URL-level data, change-over-time comparisons, prioritised fixes, client audit documents and dev tickets.",
   "author": {
-    "name": "Sitebulb Ltd"
+    "name": "Sitebulb Ltd",
+    "email": "support@sitebulb.com",
+    "url": "https://sitebulb.com"
   },
   "homepage": "https://sitebulb.com/cloud/",
   "repository": "https://github.com/sitebulb/sitebulb-plugin",
@@ -19,23 +21,89 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Sitebulb Cloud",
-    "category": "Productivity",
-    "shortDescription": "Technical-SEO skills powered by your Sitebulb Cloud audits",
-    "longDescription": "Five technical-SEO skills that work with your Sitebulb Cloud audits: prioritise fixes, track changes between crawls, produce client-facing audit documents, raise dev tickets, and run post-release checks. The plugin connects to Sitebulb Cloud through its MCP server, with OAuth sign-in to your Sitebulb account. For Sitebulb Desktop audits, install the Sitebulb Desktop plugin.",
+    "shortDescription": "Technical SEO audit insights",
+    "longDescription": "Connect ChatGPT to Sitebulb Cloud to explore the technical SEO audits in your account. Ask about audit summaries, hints and insights, affected URLs, the data for a single URL, and what changed between audits. Five built-in skills turn that data into prioritised fix lists, change reports, client-ready audit documents, dev tickets and post-release checks. Access is read-only, so it can't start crawls or change settings. For Sitebulb Desktop audits, use the separate Sitebulb Desktop plugin.",
     "developerName": "Sitebulb Ltd",
+    "category": "Data & Analytics",
     "capabilities": [
-      "Interactive",
-      "Read",
-      "Write"
+      "Read"
     ],
-    "websiteURL": "https://github.com/sitebulb/sitebulb-plugin",
+    "websiteURL": "https://sitebulb.com/",
+    "supportURL": "https://sitebulb.com/support/",
     "privacyPolicyURL": "https://sitebulb.com/policies/cookie-and-privacy-policy/",
-    "composerIcon": "./assets/logo.png",
-    "logo": "./assets/logo.png",
+    "termsOfServiceURL": "https://sitebulb.com/policies/terms/",
     "defaultPrompt": [
       "What should I fix first on this site?",
       "What changed since the last crawl?",
       "Write up the audit for my client"
-    ]
+    ],
+    "brandColor": "#1FB6FF",
+    "brandColorDark": "#1FB6FF",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png"
+  },
+  "extensions": {
+    "com.openai": {
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "List the projects in the connected account",
+              "prompt": "Which projects do I have in Sitebulb?",
+              "tools_triggered": "project_list",
+              "expected_behavior": "Returns the one project in the test account, \"Sitebulb Example Crawl\" (https://sitebulb.com), which has two finished audits."
+            },
+            {
+              "description": "Prioritised fixes (sitebulb-what-to-fix-first skill)",
+              "prompt": "What should I fix first on the Sitebulb Example Crawl project? It's the marketing site for a SaaS product and the goal is more organic sign-ups.",
+              "tools_triggered": "project_list, project_audit_list, audit_report_list, audit_hint_category_list, audit_hint_list, audit_url_list",
+              "expected_behavior": "Uses the business context given (asking at most a short follow-up if needed), then returns 3 to 5 prioritised issue clusters from the latest finished audit, each with its true affected URL count, sample URLs and an effort estimate. No hints are invented."
+            },
+            {
+              "description": "Change story between audits (sitebulb-what-changed skill)",
+              "prompt": "What changed since the last crawl of the Sitebulb Example Crawl project?",
+              "tools_triggered": "project_list, project_audit_list, audit_report_list, audit_report_summary, audit_lostfound_hint_list, audit_hint_category_list, audit_hint_list, audit_lostfound_url_list",
+              "expected_behavior": "Compares the latest finished audit with the previous one and reports improvements first, then regressions, then items to watch, with per-hint changes and sample URLs. Bookkeeping noise is filtered out. In the test account the two audits were deliberately run with different crawl settings so that there are changes to report: for example, the rendered-content hints appear in the latest audit and the uncompressed text content resources hint clears."
+            },
+            {
+              "description": "Client audit document (sitebulb-technical-seo-audit skill)",
+              "prompt": "Write up the technical SEO audit for the Sitebulb Example Crawl project. It's an onboarding audit for a new client's marketing manager.",
+              "tools_triggered": "project_list, project_audit_list, audit_report_list, audit_hint_category_list, audit_hint_list, audit_url_list",
+              "expected_behavior": "Produces a Word document draft of 5 to 10 issues ordered for an onboarding audit, each with its affected URL count, labelled sample URLs, a recommendation and indicative effort, plus review comments marking where the consultant should check the draft."
+            },
+            {
+              "description": "Dev tickets without a project management tool (sitebulb-dev-handoff skill)",
+              "prompt": "Turn the high severity link issues in the latest Sitebulb Example Crawl audit into dev tickets.",
+              "tools_triggered": "project_list, project_audit_list, audit_hint_category_list, audit_hint_list, audit_url_list",
+              "expected_behavior": "Shows a preview of each ticket in chat (problem, why it matters, affected URL count with samples, suggested fix, acceptance criteria, priority and effort). With no project management tool connected, the tickets are returned as markdown and nothing is created elsewhere."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Starting a crawl is not supported",
+              "prompt": "Crawl competitor.com for me and tell me what's wrong with it.",
+              "expected_behavior": "Explains that the plugin is read-only and cannot start crawls, and that audits are run in the Sitebulb app. No tool performs a crawl."
+            },
+            {
+              "description": "Deleting data is not supported",
+              "prompt": "Delete the oldest audit from the Sitebulb Example Crawl project.",
+              "expected_behavior": "Explains that the plugin cannot delete or change audits or projects. No data is modified."
+            },
+            {
+              "description": "Access outside the connected account",
+              "prompt": "Show me the audits for a project that belongs to another Sitebulb customer.",
+              "expected_behavior": "Only projects visible to the connected account are returned; the request for another customer's data is declined or reported as not found."
+            }
+          ]
+        },
+        "demo_recording_url": "TODO: unlisted video URL",
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or process payments. It requires an existing Sitebulb Cloud subscription, which is purchased on sitebulb.com."
+      },
+      "publication": {
+        "countries": [],
+        "release_notes": "1.0.0: initial release. Read-only access to Sitebulb Cloud audits (projects, audit summaries, hints, insights, URL-level data and comparisons between audits), plus five technical SEO skills: what to fix first, what changed, technical SEO audit, dev handoff and release check."
+      }
+    }
   }
 }

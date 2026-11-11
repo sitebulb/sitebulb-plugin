@@ -16,8 +16,9 @@ plugin. So each plugin carries its own copy, and shared/ is the only source:
 - LICENSE                 the licence of both plugins
 
 Everything under plugins/<plugin>/skills/, plus plugins/<plugin>/LICENSE and
-plugins/<plugin>/assets/logo.png, is generated. The manifests, .mcp.json and
-README.md of each plugin are written by hand, because they differ.
+plugins/<plugin>/assets/logo.png, is generated. The manifests, .mcp.json,
+README.md and LISTING.md of each plugin are written by hand, because they
+differ.
 
 Usage:
     python3 scripts/sync_shared.py           # write the generated files
