@@ -106,11 +106,12 @@ jobs:
           # The search ignores case, because a host name is case-insensitive,
           # but the allow-list is not: an address must be written exactly as
           # below, in lower case. A port, query, fragment or non-ASCII character
-          # stays part of the address, so it also fails the allow-list.
+          # stays part of the address, so it also fails the allow-list. Dots and
+          # colons at the end of an address are prose punctuation and are removed.
           refs=$(LC_ALL=C grep -rIoniE --exclude-dir=.git \
             '[a-z0-9.-]*mcp\.sitebulb\.com([a-z0-9/._~%?#=&:@+-]|[^[:print:][:space:]])*' . \
             || true)
-          bad=$(printf '%s\n' "$refs" | LC_ALL=C sed -E 's/\.+$//' | grep -v '^$' \
+          bad=$(printf '%s\n' "$refs" | LC_ALL=C sed -E 's/[.:]+$//' | grep -v '^$' \
             | grep -vE ':((desktop|cloud)\.mcp\.sitebulb\.com/mcp|mcp\.sitebulb\.com/(desktop|cloud))$' \
             || true)
           if [ -n "$bad" ]; then
