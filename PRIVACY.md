@@ -1,14 +1,13 @@
 # Privacy & Data Handling
 
-This repository contains two plugins for AI coding agents, `sitebulb-desktop`
-and `sitebulb-cloud`. Each plugin has markdown skill instructions, small Python
-scripts (an effort scorer and a Word-document builder) that run locally using
-only the Python standard library, and the address of one Sitebulb MCP server.
+This repository contains plugin content for AI coding agents: markdown skill
+instructions plus small Python scripts (an effort scorer and a Word-document
+builder) that run locally using only the Python standard library.
 
 ## Summary
 
-- The plugins contain no telemetry or analytics code.
-- The plugins run no background service and upload nothing automatically.
+- The plugin contains no telemetry or analytics code.
+- The plugin runs no background service and uploads nothing automatically.
 - The bundled scripts make no network requests — they read local input and
   write local output.
 - Data leaves your machine only when your AI host or an integration you have
@@ -20,16 +19,11 @@ only the Python standard library, and the address of one Sitebulb MCP server.
    Code, Codex, Cursor, GitHub Copilot, or any other agent means that host
    sends prompts and context — including audit data the skills have read — to
    its configured model provider. That behaviour is controlled by the host and
-   provider, not by these plugins.
+   provider, not by this plugin.
 
-2. **The Sitebulb MCP.** Each plugin declares one Sitebulb MCP server:
-   `https://desktop.mcp.sitebulb.com/mcp` for `sitebulb-desktop` and
-   `https://cloud.mcp.sitebulb.com/mcp` for `sitebulb-cloud`. When you sign in
-   and a skill runs, your agent reads audit data from that server over an
-   OAuth-authorised, read-only connection. If you connected the Sitebulb MCP yourself
-   as a custom connector, your agent reads from `https://mcp.sitebulb.com/desktop`
-   or `https://mcp.sitebulb.com/cloud` instead, in the same way. Sitebulb's
-   handling of that data is governed by the
+2. **The Sitebulb MCP.** When you connect it and a skill runs, your agent
+   reads audit data from `mcp.sitebulb.com/desktop` or `mcp.sitebulb.com/cloud` over an OAuth-authorised,
+   read-only connection. Sitebulb's handling of that data is governed by the
    [Sitebulb privacy policy](https://sitebulb.com/policies/cookie-and-privacy-policy/).
 
 3. **Optional integrations you connect.** The `sitebulb-dev-handoff` skill can create
