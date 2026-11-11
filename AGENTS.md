@@ -30,7 +30,7 @@ The repository holds one plugin, `sitebulb`, in `plugins/sitebulb`. Its five ski
 
 Do not edit a copy in a skill. Edit the file in `shared/`. Then run `python3 scripts/sync_shared.py` and commit the copies that it changes. `python3 scripts/sync_shared.py --check` writes nothing. It exits 1 when a copy differs from its source, a copy is missing or a source file is missing.
 
-The script does not touch the skill files that only one skill has. These files are `references/document-template.md` in `sitebulb-technical-seo-audit` and `references/pm-tool-mapping.md` in `sitebulb-dev-handoff`. It also does not touch the skill instructions, the manifests or the logo.
+The script does not touch the skill files that only one skill has. These files are `references/document-template.md`, `scripts/build_docx.py` and `scripts/test_build_docx.py` in `sitebulb-technical-seo-audit`, and `references/pm-tool-mapping.md` in `sitebulb-dev-handoff`. They have no source in `shared/`. Edit them in the skill. The script also does not touch the skill instructions, the README of each skill, the manifests or the logo.
 
 ## Checks to run before a push
 
