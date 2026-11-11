@@ -29,7 +29,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from changes import ChangeError, entries, iso_date  # noqa: E402
+from changes import ChangeError, date_argument, entries  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 # The manifest folders of each plugin. Each plugin.json holds "version".
@@ -98,12 +98,68 @@ def replace_value(text: str, key: str, value: str, path: Path) -> str:
     return new
 
 
+LIST_ITEM = re.compile(r"[-*+]\s+")
+
+
+def blocks(text: str) -> list[tuple[bool, str]]:
+    """Split fragment text into (is_list_item, one-line text) blocks.
+
+    A blank line ends a paragraph. A line that starts with "- ", "* " or "+ "
+    starts a list item. Each other line continues the block above it.
+    """
+    result: list[tuple[bool, list[str]]] = []
+    open_block = False
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            open_block = False
+        elif LIST_ITEM.match(stripped):
+            result.append((True, [LIST_ITEM.sub("", stripped, count=1)]))
+            open_block = True
+        elif open_block:
+            result[-1][1].append(stripped)
+        else:
+            result.append((False, [stripped]))
+            open_block = True
+    return [(item, " ".join(words)) for item, words in result]
+
+
+def groups(text: str) -> list[tuple[str, list[str]]]:
+    """Each block, with the list items under it when it ends in ":"."""
+    result: list[tuple[str, list[str]]] = []
+    for item, line in blocks(text):
+        if item and result and result[-1][0].endswith(":") and (result[-1][1] or not result[-1][2]):
+            result[-1][1].append(line)
+        else:
+            result.append((line, [], item))
+    return [(line, under) for line, under, _ in result]
+
+
+def changelog_entry(text: str) -> str:
+    """One fragment as Markdown bullets: one bullet for each paragraph or list item."""
+    lines = []
+    for line, under in groups(text):
+        lines.append(f"- {line}")
+        lines += [f"  - {sub}" for sub in under]
+    return "\n".join(lines) + "\n"
+
+
+def plain_text(text: str) -> str:
+    """One fragment as plain sentences, for the OpenAI release notes."""
+    sentences = []
+    for line, under in groups(text):
+        if under:
+            line = f"{line} {', '.join(sub.rstrip('.') for sub in under)}"
+        sentences.append(line if line[-1] in ".!?" else f"{line.rstrip(':,')}.")
+    return " ".join(sentences)
+
+
 def notes(fragments) -> str:
-    return " ".join(" ".join(text.split()) for _, _, text in fragments)
+    return " ".join(plain_text(text) for _, _, text in fragments)
 
 
 def changelog_section(version: str, date: dt.date, fragments) -> str:
-    bullets = "".join(f"- {' '.join(text.split())}\n" for _, _, text in fragments)
+    bullets = "".join(changelog_entry(text) for _, _, text in fragments)
     return f"## {version} — {date.isoformat()}\n\n{bullets}\n"
 
 
@@ -200,7 +256,7 @@ def main(argv=None) -> int:
     commands.add_parser("versions", help="print the version fields; exit 1 if they differ")
     prep = commands.add_parser("prepare", help="set the version and write the release notes")
     prep.add_argument("version")
-    prep.add_argument("--date", type=iso_date, help="section date (default: today, UTC)")
+    prep.add_argument("--date", type=date_argument, help="section date (default: today, UTC)")
     tag = commands.add_parser("check-tag", help="exit 1 if the tag is not the version everywhere")
     tag.add_argument("tag")
     tag.add_argument("--on", help="also exit 1 if HEAD is not in this ref, for example origin/main")

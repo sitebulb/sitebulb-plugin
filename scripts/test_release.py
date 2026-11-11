@@ -62,7 +62,8 @@ def copy_repo(tmp):
                             "--exclude-standard"], check=True, capture_output=True).stdout
     for rel in filter(None, files.decode("utf-8").split("\0")):
         source = REPO / rel
-        if source.is_file():
+        # dist/ holds the ZIPs of a local build, not repository files.
+        if source.is_file() and not rel.startswith("dist/"):
             (root / rel).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, root / rel)
     for path in (root / "changes").glob("*.md"):
@@ -170,6 +171,32 @@ with tempfile.TemporaryDirectory() as tmp:
            release.prepare, root, "1.1.0", DAY)
     check("a refused prepare keeps the fragment", (root / "changes/2026-11-11-a.added.md").exists(), True)
 
+with tempfile.TemporaryDirectory() as tmp:
+    root = copy_repo(tmp)
+    fragment(root, "2026-11-11-a-multi.changed.md",
+             "- Added X.\n- Fixed Y,\n  which was broken.\n\nSecond paragraph\nover two lines.")
+    fragment(root, "2026-11-11-b-list.changed.md",
+             "The check now refuses:\n\n- an apps folder\n- a hooks file")
+    release.prepare(root, "1.1.0", DAY)
+    log = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+    check("a multi-line fragment keeps one bullet for each paragraph and list item",
+          log.split("## 1.0.0")[0],
+          "# Changelog\n\n## 1.1.0 — 2026-11-11\n\n- Added X.\n- Fixed Y, which was broken.\n"
+          "- Second paragraph over two lines.\n- The check now refuses:\n  - an apps folder\n"
+          "  - a hooks file\n\n")
+    notes = json.loads(codex(root, "sitebulb-desktop").read_text())["extensions"]["com.openai"]
+    check("the release notes of a multi-line fragment are plain sentences",
+          notes["publication"]["release_notes"],
+          "1.1.0: Added X. Fixed Y, which was broken. Second paragraph over two lines. "
+          "The check now refuses: an apps folder, a hooks file.")
+
+for script, args in (("release.py", ["prepare", "1.1.0", "--date", "2026-13-01"]),
+                     ("changes.py", ["new", "--kind", "docs", "--message", "x", "--date", "2026-13-01"])):
+    proc = subprocess.run([sys.executable, str(HERE / script), *args], capture_output=True, text=True)
+    check(f"{script} --date 2026-13-01 is a usage error, exit 2", proc.returncode, 2)
+    check(f"{script} --date 2026-13-01 prints no traceback",
+          ("Traceback" in proc.stderr, "is not a YYYY-MM-DD date" in proc.stderr), (False, True))
+
 # --- check-tag ------------------------------------------------------------------
 
 with tempfile.TemporaryDirectory() as tmp:
@@ -267,7 +294,22 @@ sabotage("a secret with a gitleaks:allow comment",
          write("notes.md", f'token = "{secret()}" # gitleaks:allow\n'), "gitleaks found a secret")
 sabotage("a .gitleaks.toml that turns the rules off",
          write(".gitleaks.toml", "[allowlist]\npaths = ['.*']\n"), "gitleaks configuration")
+sabotage("a secret in a file with an image name",
+         write("assets/notes.png", f'token = "{secret()}"\n'), "assets/notes.png:1: gitleaks found a secret")
+sabotage("a secret in a file with a font name",
+         write("assets/font.woff2", f'token = "{secret()}"\n'), "assets/font.woff2:1: gitleaks found a secret")
+sabotage("a secret under node_modules/",
+         write("node_modules/x/config.txt", f'token = "{secret()}"\n'), "node_modules/x/config.txt:1:")
 sabotage("an apps folder", write("apps/app.json", "{}\n"), "apps/ folder")
+sabotage("an Apps folder in another letter case", write("Apps/a.json", "{}\n"), "apps/ folder")
+sabotage("a .App.json file", write(".App.json", '{"apps": {}}\n'), ".app.json file")
+sabotage("a Hooks/Hooks.JSON file", write("Hooks/Hooks.JSON", "{}\n"), "hooks/ folder")
+sabotage("a hooks key in .agent-plugin/plugin.json",
+         write(".agent-plugin/plugin.json", '{"name": "sitebulb-desktop", "hooks": "./x.json"}\n'),
+         ".agent-plugin/plugin.json: declares 'hooks'")
+sabotage("an extensions.com.openai.hooks key in a root plugin.json",
+         write("plugin.json", '{"extensions": {"com.openai": {"hooks": "./x.json"}}}\n'),
+         "plugin.json: declares 'hooks'")
 sabotage("a .app.json file", write(".app.json", '{"apps": {}}\n'), ".app.json file")
 sabotage("a hooks folder", write("hooks/session_start.py", "print()\n"), "hooks/ folder")
 sabotage("a hooks.json file outside hooks/", write("config/hooks.json", "{}\n"), "hooks.json file")

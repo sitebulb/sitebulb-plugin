@@ -12,9 +12,11 @@ Usage:
     python3 scripts/changes.py check --base <commit> # also require a new
                                                      # fragment since <commit>
 
-A diff needs no new fragment when it changes only CHANGELOG.md, deletes
-fragments, and changes only the version and release-notes fields of the
-version files. That is the diff that `release.py prepare` makes.
+A fragment is new when its text is not the text of a fragment at <commit>, so
+a renamed or copied fragment does not count. A diff needs no new fragment when
+it changes only CHANGELOG.md, deletes fragments, and changes only the version
+and release-notes fields of the version files. That is the diff that
+`release.py prepare` makes.
 """
 from __future__ import annotations
 
@@ -33,6 +35,14 @@ NAME = re.compile(r"(\d{4}-\d{2}-\d{2})-([a-z0-9]+(?:-[a-z0-9]+)*)\.(" + "|".joi
 
 class ChangeError(Exception):
     pass
+
+
+def date_argument(value: str) -> dt.date:
+    """iso_date for argparse, which turns an ArgumentTypeError into a usage error."""
+    try:
+        return iso_date(value)
+    except ChangeError as error:
+        raise argparse.ArgumentTypeError(str(error)) from None
 
 
 def iso_date(value: str) -> dt.date:
@@ -113,6 +123,14 @@ def release_only(root: Path, base: str, rel: str, version_fields: dict[str, list
     return strip_release_fields(before, keys) == strip_release_fields(after, keys)
 
 
+def fragment_texts(root: Path, rev: str) -> set[str]:
+    """The stripped text of each fragment in changes/ at rev."""
+    out = git(root, "ls-tree", "-z", "--name-only", f"{rev}^{{commit}}", "changes/")
+    paths = [p.decode("utf-8") for p in out.split(b"\0") if p]
+    return {git(root, "show", f"{rev}:{p}").decode("utf-8", "replace").strip()
+            for p in paths if is_fragment_path(p)}
+
+
 def check(root: Path, base: str | None = None) -> str:
     fragments = entries(root)
     if base is None:
@@ -124,7 +142,11 @@ def check(root: Path, base: str | None = None) -> str:
     for path, keys in version_fields(root):
         fields.setdefault(path.relative_to(root).as_posix(), []).append(keys)
     changed = diff_paths(root, base)
-    added = [p for p in diff_paths(root, base, "A") if is_fragment_path(p)]
+    # A fragment is new only when its text is not the text of a fragment at the
+    # base. Then a renamed or copied fragment does not count.
+    old_texts = fragment_texts(root, base)
+    added = [p for p in diff_paths(root, base, "A") if is_fragment_path(p)
+             and git(root, "show", f"HEAD:{p}").decode("utf-8", "replace").strip() not in old_texts]
     deleted = set(diff_paths(root, base, "D"))
     if not changed or added:
         return "This change adds a change fragment." if added else "No files changed."
@@ -165,7 +187,7 @@ def main(argv=None) -> int:
     make.add_argument("--kind", required=True, choices=KINDS)
     make.add_argument("--message", required=True)
     make.add_argument("--slug", help="file-name slug (default: from the message)")
-    make.add_argument("--date", type=iso_date, help="fragment date (default: today, UTC)")
+    make.add_argument("--date", type=date_argument, help="fragment date (default: today, UTC)")
     validate = commands.add_parser("check", help="validate fragments")
     validate.add_argument("--base", help="require a new fragment in the diff from this commit to HEAD")
     args = parser.parse_args(argv)

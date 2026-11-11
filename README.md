@@ -156,8 +156,9 @@ CI fails a pull request that changes files and adds no fragment. A change to `CH
    ```
 
 6. The tag starts the Release workflow. The workflow fails when the tagged commit is not on `main`, or when a version field is not `<X.Y.Z>`. Then it builds `sitebulb-desktop-<X.Y.Z>.zip` and `sitebulb-cloud-<X.Y.Z>.zip` and checks each ZIP. The check fails on these items:
-   - A secret that gitleaks finds.
-   - An `apps` or `hooks` folder, a `.app.json` or `hooks.json` file, or a manifest that declares `apps` or `hooks`.
+   - A secret that gitleaks finds in any file, also in a file with an image or font name.
+   - An `apps` or `hooks` folder, or a `.app.json` or `hooks.json` file, in any letter case.
+   - A `plugin.json` at the ZIP root or in a root dot-folder, for example `.agent-plugin/`, that declares `apps` or `hooks`.
    - A `demo_recording_url` that is not an `https://` URL.
 7. The workflow attaches the ZIPs and their `.sha256` files to a draft GitHub release for the tag. Download each ZIP, upload it to the OpenAI plugin portal, then publish the draft release. The workflow uploads nothing to OpenAI or Anthropic.
 

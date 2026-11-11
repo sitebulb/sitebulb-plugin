@@ -12,9 +12,11 @@ python3 scripts/changes.py new --kind fixed --message "Corrected the Cloud plugi
 
 The command writes `changes/<YYYY-MM-DD>-<slug>.<kind>.md`. The kind is one of `added`, `changed`, `fixed`, `removed`, `security`, `docs` or `maintenance`. Write the text for a plugin user: what changed and why it matters to them. The text goes into the changelog and into the release notes that OpenAI reads, without the kind.
 
+A fragment can have more than one paragraph, and a list with `- ` items. In `CHANGELOG.md`, each paragraph and each list item becomes one bullet. A list after a line that ends in ":" goes under that line. In the release notes, the text becomes plain sentences.
+
 ## The CI check
 
-CI fails a pull request that changes files and adds no fragment. A pull request needs no fragment when each file that it changes is one of these:
+CI fails a pull request that changes files and adds no new fragment. A fragment is new only when no fragment at the base has the same text, so a renamed or copied fragment does not count. A pull request needs no fragment when each file that it changes is one of these:
 
 - `CHANGELOG.md`.
 - A fragment that the pull request deletes.

@@ -43,7 +43,8 @@ def copy_repo(tmp):
                             "--exclude-standard"], check=True, capture_output=True).stdout
     for rel in filter(None, files.decode("utf-8").split("\0")):
         source = REPO / rel
-        if source.is_file():
+        # dist/ holds the ZIPs of a local build, not repository files.
+        if source.is_file() and not rel.startswith("dist/"):
             (root / rel).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, root / rel)
     for path in (root / "changes").glob("*.md"):
@@ -162,6 +163,23 @@ with tempfile.TemporaryDirectory() as tmp:
     commit(root)
     check("editing an existing fragment is not a new fragment",
           gate(root, base) is not None, True)
+
+    for label, change in (
+            ("renaming", lambda: git(root, "mv", "changes/2026-11-11-readme.docs.md",
+                                     "changes/2026-11-12-readme.docs.md")),
+            ("copying", lambda: (root / "changes/2026-11-12-copy.docs.md").write_text(
+                (root / "changes/2026-11-11-readme.docs.md").read_text()))):
+        git(root, "reset", "-q", "--hard", base)
+        change()
+        readme.write_text(readme.read_text() + f"\n{label}\n")
+        commit(root)
+        check(f"{label} an existing fragment beside a change is not a new fragment",
+              "needs a new fragment" in (gate(root, base) or ""), True)
+    git(root, "reset", "-q", "--hard", base)
+    git(root, "mv", "changes/2026-11-11-readme.docs.md", "changes/2026-11-12-readme.docs.md")
+    commit(root)
+    check("renaming a fragment alone is not a new fragment",
+          "needs a new fragment" in (gate(root, base) or ""), True)
 
 with tempfile.TemporaryDirectory() as tmp:
     root = copy_repo(tmp)
