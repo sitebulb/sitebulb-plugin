@@ -18,27 +18,28 @@ Never write any of these items in those places:
 
 - A commit message has a Conventional Commits subject and a short body for a public reader. Do not add a `Co-Authored-By: Claude` trailer. A repository ruleset refuses a push that contains it.
 - A PR body says what changed for users and contributors, and how it was tested. Keep the internal review history in Sitebulb's own systems, not here.
-- Every PR adds a change fragment. See [`changes/README.md`](changes/README.md).
-- To make a release, follow [Making a release](README.md#making-a-release) in the README.
 - Never force-push `main`. Never use `--no-verify`.
+
+## Layout
+
+The repository holds one plugin, `sitebulb`, in `plugins/sitebulb`. Its five skills are in `plugins/sitebulb/skills`. The plugin manifests are in `plugins/sitebulb/.claude-plugin`, `plugins/sitebulb/.codex-plugin` and `plugins/sitebulb/.cursor-plugin`. The marketplace files are `.claude-plugin/marketplace.json`, `.cursor-plugin/marketplace.json` and `.agents/plugins/marketplace.json`.
 
 ## Shared files
 
-`shared/` is the only source of the skills, the logo and the engine files. The root `LICENSE` is the source of each plugin's `LICENSE`. Do not edit `plugins/<plugin>/skills/`, `plugins/<plugin>/LICENSE` or `plugins/<plugin>/assets/logo.png`. After a change to `shared/` or `LICENSE`, run `python3 scripts/sync_shared.py` and commit the generated files. The manifests, `.mcp.json`, `README.md` and `LISTING.md` of each plugin are written by hand.
+`shared/` is the source of the shared engine files. These files are in `shared/references` and `shared/scripts`. Each skill has a copy of the files that it uses. The list of files for each skill is in `scripts/sync_shared.py`.
+
+Do not edit a copy in a skill. Edit the file in `shared/`. Then run `python3 scripts/sync_shared.py` and commit the copies that it changes. `python3 scripts/sync_shared.py --check` writes nothing. It exits 1 when a copy differs from its source, a copy is missing or a source file is missing.
+
+The script does not touch the skill files that only one skill has. These files are `references/document-template.md` in `sitebulb-technical-seo-audit` and `references/pm-tool-mapping.md` in `sitebulb-dev-handoff`. It also does not touch the skill instructions, the manifests or the logo.
 
 ## Checks to run before a push
 
-Run these commands from the repository root. They are the steps in `.github/workflows/ci.yml`:
+These are the steps in `.github/workflows/ci.yml`. Run them from the repository root. Each step must exit 0.
 
 ```bash
-python3 scripts/changes.py check --base origin/main
-bin=$(mktemp -d) && scripts/install_gitleaks.sh "$bin"   # Linux x64 only
-PATH="$bin:$PATH" python3 scripts/test_release.py
-python3 scripts/test_changes.py
 python3 shared/scripts/test_score_effort.py
-python3 shared/skills/sitebulb-technical-seo-audit/scripts/test_build_docx.py
+python3 plugins/sitebulb/skills/sitebulb-technical-seo-audit/scripts/test_build_docx.py
 python3 scripts/sync_shared.py --check
-python3 scripts/release.py versions
 ```
 
-Then run the other `ci.yml` steps as they are written in that file. These steps are "Manifests are valid JSON", the MCP server step, the OpenAI and Anthropic listing steps, "claude plugin validate", "Only approved MCP endpoints referenced" and "Skill names are namespaced". Each step must exit 0.
+Then run the other three steps as they are written in `ci.yml`. These steps are "Manifests are valid JSON", "Only approved MCP endpoints referenced" and "Skill names are namespaced". "Only approved MCP endpoints referenced" reads every file in the checkout. "Skill names are namespaced" reads every tracked file except `CHANGELOG.md` and `ci.yml`. Both steps read this file.

@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "sitebulb-cloud": {
-      "type": "http",
-      "url": "https://cloud.mcp.sitebulb.com/mcp"
-    }
-  }
-}

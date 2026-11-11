@@ -19,16 +19,13 @@ concept, an impact assessment (what an attacker can do), and any suggested
 mitigation. We will acknowledge receipt as soon as possible and work with you
 on validation, remediation, and coordinated disclosure timing.
 
-Issues in the Sitebulb MCP service itself or in Sitebulb Desktop/Cloud can be
-reported through the same private channels. The MCP service includes the
-plugin servers (`https://desktop.mcp.sitebulb.com/mcp`,
-`https://cloud.mcp.sitebulb.com/mcp`) and the custom-connector servers
-(`https://mcp.sitebulb.com/desktop`, `https://mcp.sitebulb.com/cloud`).
+Issues in the Sitebulb MCP service itself (`mcp.sitebulb.com/desktop`,
+`mcp.sitebulb.com/cloud`) or in Sitebulb
+Desktop/Cloud can be reported through the same private channels.
 
 ## Scope notes
 
-This repository contains two plugins with instructions, small local scripts and
-the address of one MCP server each:
+This repository contains plugin instructions and small local scripts:
 
 - Skill content is markdown read by your AI host; it does not run as a server
   process.

@@ -3,16 +3,10 @@
   "interface": { "displayName": "Sitebulb" },
   "plugins": [
     {
-      "name": "sitebulb-desktop",
-      "source": { "source": "local", "path": "./plugins/sitebulb-desktop" },
+      "name": "sitebulb",
+      "source": { "source": "local", "path": "./plugins/sitebulb" },
       "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
-      "category": "Data & Analytics"
-    },
-    {
-      "name": "sitebulb-cloud",
-      "source": { "source": "local", "path": "./plugins/sitebulb-cloud" },
-      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
-      "category": "Data & Analytics"
+      "category": "Productivity"
     }
   ]
 }

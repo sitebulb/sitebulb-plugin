@@ -4,18 +4,11 @@
   "description": "Official Sitebulb plugins — technical-SEO skills powered by your Sitebulb Desktop or Cloud audits.",
   "plugins": [
     {
-      "name": "sitebulb-desktop",
-      "source": "./plugins/sitebulb-desktop",
-      "description": "Technical-SEO skills and the Sitebulb Desktop MCP server",
+      "name": "sitebulb",
+      "source": "./plugins/sitebulb",
+      "description": "Technical-SEO skill suite for Sitebulb Desktop and Cloud audits",
       "category": "seo",
-      "tags": ["seo", "audit", "sitebulb", "desktop"]
-    },
-    {
-      "name": "sitebulb-cloud",
-      "source": "./plugins/sitebulb-cloud",
-      "description": "Technical-SEO skills and the Sitebulb Cloud MCP server",
-      "category": "seo",
-      "tags": ["seo", "audit", "sitebulb", "cloud"]
+      "tags": ["seo", "audit", "sitebulb"]
     }
   ]
 }
