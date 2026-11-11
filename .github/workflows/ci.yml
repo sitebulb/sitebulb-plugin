@@ -9,12 +9,40 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Each change adds a change fragment
+        env:
+          CHANGE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ -n "$CHANGE_BASE" ] && [ "$CHANGE_BASE" != "0000000000000000000000000000000000000000" ]; then
+            python3 scripts/changes.py check --base "$CHANGE_BASE"
+          else
+            python3 scripts/changes.py check
+          fi
+
   validate:
     runs-on: ubuntu-latest
     env:
       CLAUDE_CODE_VERSION: 2.1.311
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Release script test suite
+        run: |
+          scripts/install_gitleaks.sh "$RUNNER_TEMP/bin"
+          PATH="$RUNNER_TEMP/bin:$PATH" python3 scripts/test_release.py
+
+      - name: Change fragment test suite
+        run: python3 scripts/test_changes.py
 
       - name: Scorer test suite
         run: python3 shared/scripts/test_score_effort.py
@@ -32,17 +60,22 @@ jobs:
             python3 -m json.tool "$f" > /dev/null || { echo "Invalid JSON: $f"; exit 1; }
           done
 
+      - name: Every version field holds the same version
+        run: python3 scripts/release.py versions
+
       - name: Each plugin declares its one MCP server and is listed everywhere
         run: |
           python3 - <<'PY'
           import json, sys
           from pathlib import Path
 
+          sys.path.insert(0, "scripts")
+          from release import MANIFESTS
+
           URLS = {
               "sitebulb-desktop": "https://desktop.mcp.sitebulb.com/mcp",
               "sitebulb-cloud": "https://cloud.mcp.sitebulb.com/mcp",
           }
-          MANIFESTS = [".claude-plugin", ".codex-plugin", ".cursor-plugin"]
           load = lambda p: json.loads(Path(p).read_text(encoding="utf-8"))
           bad = []
 
@@ -60,16 +93,12 @@ jobs:
                       bad.append(f"{name}: server {key} is not type http at {url}")
                   if server.get("headers") or "clientSecret" in json.dumps(server):
                       bad.append(f"{name}: server {key} has headers or a clientSecret")
-              versions = set()
               for m in MANIFESTS:
                   data = load(root / m / "plugin.json")
-                  versions.add(data.get("version"))
                   if data.get("name") != name:
                       bad.append(f"{name}: {m}/plugin.json name is {data.get('name')!r}")
                   if m != ".claude-plugin" and data.get("mcpServers") != "./.mcp.json":
                       bad.append(f"{name}: {m}/plugin.json mcpServers is not ./.mcp.json")
-              if len(versions) != 1:
-                  bad.append(f"{name}: manifest versions differ: {sorted(map(str, versions))}")
 
           for path in [".claude-plugin/marketplace.json", ".cursor-plugin/marketplace.json",
                        ".agents/plugins/marketplace.json"]:
@@ -174,7 +203,8 @@ jobs:
                   if key in json.dumps(codex):
                       bad.append(f"{name}: the manifest holds {key}; OpenAI rejects it in the ZIP")
               # Optional in the ZIP, required for MCP review. Accept an https:// URL,
-              # or the placeholder with a warning until the video exists.
+              # or the placeholder with a warning until the video exists. The
+              # release ZIP check (scripts/check_zip.py) refuses the placeholder.
               demo = review.get("demo_recording_url")
               if demo == DEMO_PLACEHOLDER:
                   print(f"warning: {name}: demo_recording_url is the placeholder "
