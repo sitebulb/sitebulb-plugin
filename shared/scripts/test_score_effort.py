@@ -106,7 +106,7 @@ check("bogus title -> unmapped", r["matched"], False)
 
 # URL fallback: wrong/renamed title but a correct UNIQUE learn-more URL recovers it.
 real = BY_TITLE["has an anchored image with no alt text"]
-r = score([{"title": "Renamed by Gareth in v9", "affected_urls": 253,
+r = score([{"title": "Hint title that a later version renamed", "affected_urls": 253,
             "learn_more_url": real["learn_more_url"]}])["results"][0]
 check("renamed title + unique URL -> matched via url", (r["matched"], r["matched_via"]), (True, "url"))
 
