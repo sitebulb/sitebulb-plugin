@@ -19,8 +19,8 @@ concept, an impact assessment (what an attacker can do), and any suggested
 mitigation. We will acknowledge receipt as soon as possible and work with you
 on validation, remediation, and coordinated disclosure timing.
 
-Issues in the Sitebulb MCP service itself (`mcp.sitebulb.com/desktop`,
-`mcp.sitebulb.com/cloud`) or in Sitebulb
+Issues in the Sitebulb MCP service itself (`desktop.mcp.sitebulb.com/mcp`,
+`cloud.mcp.sitebulb.com/mcp`) or in Sitebulb
 Desktop/Cloud can be reported through the same private channels.
 
 ## Scope notes

@@ -67,7 +67,7 @@ The skills read your audit data through the Sitebulb MCP. Connect the server for
 
 **→ [Sitebulb MCP: Start Here](https://support.sitebulb.com/en/articles/15970977-sitebulb-mcp-start-here)**
 
-The server URL is `https://mcp.sitebulb.com/desktop` for Sitebulb Desktop or `https://mcp.sitebulb.com/cloud` for Sitebulb Cloud, with OAuth sign-in to your Sitebulb account. If a skill runs before the MCP is connected, it will point you at the same guide.
+The server URL is `https://desktop.mcp.sitebulb.com/mcp` for Sitebulb Desktop or `https://cloud.mcp.sitebulb.com/mcp` for Sitebulb Cloud, with OAuth sign-in to your Sitebulb account. If a skill runs before the MCP is connected, it will point you at the same guide.
 
 **Requirements:** a Sitebulb Desktop or Sitebulb Cloud licence, at least one finished audit in the project you want to work with, and `python3` available to the agent (the skills bundle small stdlib-only scripts for scoring and document generation). The connection is read-only — skills can read your audits but never trigger crawls.
 

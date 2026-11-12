@@ -34,10 +34,12 @@ jobs:
 
       - name: Only approved MCP endpoints referenced
         run: |
-          bad=$(grep -rIn 'mcp\.sitebulb\.com' --exclude-dir=.git . \
-            | grep -vE 'mcp\.sitebulb\.com/(desktop|cloud)([^a-z]|$)' || true)
+          # Each reference is checked on its own, with its port and path, so a line
+          # that holds an approved URL cannot hide another reference.
+          bad=$(grep -rIonE '[A-Za-z0-9.-]*mcp\.sitebulb\.com(:[0-9]+)?(/[A-Za-z0-9_-]*)*' --exclude-dir=.git . \
+            | grep -vE '^[^:]+:[0-9]+:(desktop|cloud)\.mcp\.sitebulb\.com/mcp$' || true)
           if [ -n "$bad" ]; then
-            echo "Disallowed MCP gateway reference (only the /desktop and /cloud endpoints are public):"
+            echo "Disallowed MCP reference (only the Desktop and Cloud /mcp URLs are public):"
             echo "$bad"
             exit 1
           fi
