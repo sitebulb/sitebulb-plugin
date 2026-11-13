@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The Sitebulb MCP has new server URLs: `https://desktop.mcp.sitebulb.com/mcp` for Sitebulb Desktop and `https://cloud.mcp.sitebulb.com/mcp` for Sitebulb Cloud. The README, `PRIVACY.md` and `SECURITY.md` give the new URLs. A connection that uses the earlier `/desktop` or `/cloud` URL continues to work.
 - The `sitebulb-desktop` and `sitebulb-cloud` plugins are withdrawn. They were on `main` on 11 November 2026. The repository again holds only the `sitebulb` plugin, version 0.2.0.
 - If you installed `sitebulb-desktop` or `sitebulb-cloud`, uninstall it. Then install `sitebulb` as the README tells you. The withdrawn plugins connected the Sitebulb MCP, and `sitebulb` does not. Connect the Sitebulb MCP again, as "Connecting to Sitebulb" in the README tells you.
 
